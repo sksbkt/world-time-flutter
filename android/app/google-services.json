@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "276090823180",
+    "project_id": "world-time-452f9",
+    "storage_bucket": "world-time-452f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276090823180:android:182ad5b28a23779da34429",
+        "android_client_info": {
+          "package_name": "com.example.world_time"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276090823180-t3i03pepfa1e2ospunsvafcsmp4h8nmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCieIcj0f0UCeQmsTklbgW5iVEeSgrBpgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276090823180-t3i03pepfa1e2ospunsvafcsmp4h8nmr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

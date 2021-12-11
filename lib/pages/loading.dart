@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:world_time/services/world_time.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
   String time = 'loading';
   late String location;
   late String flag;
@@ -51,11 +53,20 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.blue[800],
-        body: Center(
-          child: SpinKitChasingDots(color: Colors.white, size: 50.0),
-        ));
+    return FutureBuilder(
+        future: _fbApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print('Snapshot has error! ${snapshot.error.toString()}');
+            return Center(child: Text('Something went wrong'));
+          } else {
+            return Scaffold(
+                backgroundColor: Colors.blue[800],
+                body: Center(
+                  child: SpinKitChasingDots(color: Colors.white, size: 50.0),
+                ));
+          }
+        });
   }
 
   Future<void> _loadPref() async {
