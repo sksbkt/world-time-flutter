@@ -31,8 +31,6 @@ class _ChooseLocationState extends State<ChooseLocation>
   Future<void> _savePref(index) async {
     await SharedPreferences.getInstance().then((prefs) => {
           prefs.setString('location', locations[index].location),
-          print('prefs:'),
-          print(prefs.getString('location')),
           prefs.setString('flag', locations[index].flag),
           prefs.setString('url', locations[index].url),
         });
