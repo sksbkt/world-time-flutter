@@ -36,7 +36,7 @@ class SignupWidget extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Signup using Google account',
+              'Sign up using Google account',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class SignupWidget extends StatelessWidget {
                 color: Colors.red,
               ),
               label: Text(
-                'Signup',
+                'Sign up',
                 style: TextStyle(color: Colors.grey[800], fontSize: 18),
               )),
           SizedBox(

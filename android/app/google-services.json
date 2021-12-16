@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "276090823180",
+    "firebase_url": "https://world-time-452f9-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "world-time-452f9",
     "storage_bucket": "world-time-452f9.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "276090823180-430u6lkq122p4ln1nf62q3i3du385vil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.world_time",
+            "certificate_hash": "6b461eb1e09fb75ae254f9d5ad1e6a7855122139"
+          }
+        },
         {
           "client_id": "276090823180-t3i03pepfa1e2ospunsvafcsmp4h8nmr.apps.googleusercontent.com",
           "client_type": 3
