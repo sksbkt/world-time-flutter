@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,5 +17,10 @@ class GoogleSingInProvider extends ChangeNotifier {
     await FirebaseAuth.instance.signInWithCredential(credential);
     print(_user!.email);
     notifyListeners();
+  }
+
+  Future logOut() async {
+    await googleSingIn.disconnect();
+    FirebaseAuth.instance.signOut();
   }
 }

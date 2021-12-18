@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:world_time/services/GoogleSignInProvider.dart';
 
 class SignupWidget extends StatelessWidget {
   const SignupWidget({Key? key}) : super(key: key);
@@ -65,7 +67,11 @@ class SignupWidget extends StatelessWidget {
             height: 10,
           ),
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                final provider =
+                    Provider.of<GoogleSingInProvider>(context, listen: false);
+                provider.googleLogin();
+              },
               child: Text(
                 'Already have and account!',
                 style: TextStyle(color: Colors.grey[300]),
