@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
+import 'package:world_time/widgets/NavigationDrawer.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,6 +23,12 @@ class _HomeState extends State<Home> {
     Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[800];
     return Scaffold(
       backgroundColor: bgColor,
+      drawer: NavigationDrawerWidget(
+        DrawerBg: bgColor,
+      ),
+      appBar: AppBar(
+        backgroundColor: bgColor,
+      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(

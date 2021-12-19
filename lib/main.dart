@@ -14,9 +14,9 @@ void main() async {
   runApp(ChangeNotifierProvider(
     create: (context) => GoogleSingInProvider(),
     child: MaterialApp(
-      initialRoute: '/account',
+      initialRoute: '/',
       routes: {
-        // '/': (context) => Loading(),
+        '/': (context) => Loading(),
         '/home': (context) => Home(),
         '/location': (context) => ChooseLocation(),
         '/account': (context) => account()
