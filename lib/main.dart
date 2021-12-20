@@ -6,6 +6,8 @@ import 'package:world_time/pages/account.dart';
 import 'package:world_time/pages/choose_location.dart';
 import 'package:world_time/pages/home.dart';
 import 'package:world_time/pages/loading.dart';
+import 'package:world_time/pages/schedule.dart';
+import 'package:world_time/pages/time_deck.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 
 void main() async {
@@ -19,7 +21,9 @@ void main() async {
         '/': (context) => Loading(),
         '/home': (context) => Home(),
         '/location': (context) => ChooseLocation(),
-        '/account': (context) => account()
+        '/account': (context) => account(),
+        '/schedule': (context) => Schedule(),
+        '/time_deck': (context) => TimeDeck(),
       },
     ),
   ));

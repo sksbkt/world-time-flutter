@@ -25,7 +25,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                     size: 30,
                   );
                 } else if (snapshot.hasData)
-                  return LoggedInDrawerWidget();
+                  return LoggedInDrawerWidget(
+                    bgColor: DrawerBg,
+                  );
                 else if (snapshot.hasError)
                   return Text('Something went wrong');
                 else

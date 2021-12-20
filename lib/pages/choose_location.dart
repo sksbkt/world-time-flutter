@@ -65,22 +65,6 @@ class _ChooseLocationState extends State<ChooseLocation>
             child: Card(
               elevation: 0,
               child: ListTile(
-                // leading: Container(
-                //   height: 40,
-                //   width: 40,
-                //   decoration: BoxDecoration(
-                //       boxShadow: [
-                //         BoxShadow(
-                //             color: (Colors.grey[400])!,
-                //             spreadRadius: 3,
-                //             blurRadius: 3)
-                //       ],
-                //       shape: BoxShape.circle,
-                //       // border: Border.all(width: 1, color: (Colors.grey[200])!),
-                //       image: DecorationImage(
-                //           fit: BoxFit.fill,
-                //           image: AssetImage('assets/${locations[index].flag}'))),
-                // ),
                 leading: CircleAvatar(
                   backgroundImage:
                       AssetImage('assets/${locations[index].flag}'),

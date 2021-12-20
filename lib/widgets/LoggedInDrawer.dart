@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoggedInDrawerWidget extends StatelessWidget {
+  LoggedInDrawerWidget({Color? bgColor});
   final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,7 @@ class LoggedInDrawerWidget extends StatelessWidget {
             Column(
               children: [
                 CircleAvatar(
-                  // child: Text(
-                  //   user.displayName!.substring(0, 2),
-                  //   style: TextStyle(
-                  //       fontWeight: FontWeight.bold, color: Colors.grey[300]),
-                  // ),
-                  radius: 30,
+                  radius: 20,
                   backgroundImage: NetworkImage(user.photoURL!),
                 ),
               ],
@@ -61,14 +57,25 @@ class LoggedInDrawerWidget extends StatelessWidget {
             )
           ],
         ),
-        BuildMenuItem(text: 'schedule', icon: FontAwesomeIcons.calendarAlt)
+        SizedBox(
+          height: 20,
+        ),
+        BuildMenuItem(
+            text: 'Schedule',
+            icon: FontAwesomeIcons.calendarAlt,
+            onClick: () => selectedItem(context, 0)),
+        BuildMenuItem(
+            text: 'Time deck',
+            icon: FontAwesomeIcons.clock,
+            onClick: () => selectedItem(context, 1))
       ],
     ));
   }
 }
 
-Widget BuildMenuItem({required String text, required IconData icon}) {
-  final color = Colors.white;
+Widget BuildMenuItem(
+    {required String text, required IconData icon, VoidCallback? onClick}) {
+  const color = Colors.white;
   return ListTile(
     leading: Icon(
       icon,
@@ -78,6 +85,19 @@ Widget BuildMenuItem({required String text, required IconData icon}) {
       text,
       style: TextStyle(color: color),
     ),
-    onTap: () {},
+    onTap: onClick,
   );
+}
+
+void selectedItem(BuildContext context, int index) {
+  Navigator.of(context)
+      .pop(); //closes the navigation menu before switchiing pages
+  switch (index) {
+    case 0:
+      Navigator.of(context).pushNamed('/schedule');
+      break;
+    case 1:
+      Navigator.of(context).pushNamed('/time_deck');
+      break;
+  }
 }
