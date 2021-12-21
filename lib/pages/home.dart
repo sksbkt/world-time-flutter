@@ -84,41 +84,6 @@ class _HomeState extends State<Home> {
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 100,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 0),
-                        child: TextButton.icon(
-                            onPressed: () {
-                              final provider =
-                                  Provider.of<GoogleSingInProvider>(context,
-                                      listen: false);
-                              provider.googleLogin();
-                            },
-                            icon: Icon(
-                              FontAwesomeIcons.google,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              'Google Sing in',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 19),
-                            ),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                minimumSize: Size.fromHeight(60))),
-                      ),
-                    )
-                  ],
-                )
               ],
             ),
           ),

@@ -11,20 +11,9 @@ class LoggedInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Logged in'),
+          title: Text('Profile'),
           centerTitle: true,
           actions: [],
-          leading: IconButton(
-            onPressed: () {
-              final provider =
-                  Provider.of<GoogleSingInProvider>(context, listen: false);
-              provider.logOut();
-            },
-            icon: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(user.photoURL!),
-            ),
-          ),
         ),
         body: Container(
           alignment: Alignment.center,
@@ -32,13 +21,6 @@ class LoggedInWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'profile',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white60),
-              ),
               SizedBox(
                 height: 20,
               ),
@@ -65,7 +47,18 @@ class LoggedInWidget extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Colors.white60),
-              )
+              ),
+              TextButton.icon(
+                  onPressed: () {
+                    final provider = Provider.of<GoogleSingInProvider>(context,
+                        listen: false);
+                    provider.logOut();
+                  },
+                  icon: Icon(Icons.logout),
+                  label: Text(
+                    'logout',
+                    style: TextStyle(fontWeight: FontWeight.w400),
+                  ))
             ],
           ),
         ));
