@@ -6,11 +6,17 @@ import 'package:world_time/widgets/LoggedIn.dart';
 import 'package:world_time/widgets/Signup.dart';
 
 class account extends StatelessWidget {
-  const account({Key? key}) : super(key: key);
+  account({Key? key}) : super(key: key);
+  final color = Colors.grey[900];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: color,
+      appBar: AppBar(
+        backgroundColor: color,
+        title: Text('Profile'),
+        centerTitle: true,
+      ),
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

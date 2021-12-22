@@ -18,9 +18,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
                 BuildMenuItem(
                     text: 'Schedule',
                     icon: FontAwesomeIcons.calendarAlt,
