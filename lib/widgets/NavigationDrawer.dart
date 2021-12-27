@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:world_time/services/world_time.dart';
 import 'package:world_time/widgets/LoggedInDrawer.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -15,7 +17,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             child: ListView(
               children: [
                 LoggedInDrawerWidget(),
-                BuildSearchField(),
+                BuildSearchField(context),
                 SizedBox(
                   height: 10,
                 ),
@@ -32,7 +34,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 }
 
-Widget BuildSearchField() {
+Widget oldBuildSearchField() {
   final Color = Colors.white;
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -57,6 +59,63 @@ Widget BuildSearchField() {
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: Colors.white))),
+    ),
+  );
+}
+
+Widget BuildSearchField(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+    child: TypeAheadField<WorldTime>(
+      debounceDuration: Duration(microseconds: 500),
+      // hideSuggestionsOnKeyboardHide: false,//coulb be problematic since we are using this feature in the navbar
+      textFieldConfiguration: TextFieldConfiguration(
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            hintText: 'Search',
+            fillColor: Colors.white12,
+            filled: true,
+            hintStyle: TextStyle(
+                color: Colors.white.withOpacity(0.3),
+                fontWeight: FontWeight.w300),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.white.withOpacity(0.3),
+            ),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(color: Colors.white))),
+      ),
+      suggestionsCallback: WorldTime.Suggestion,
+      itemBuilder: (context, WorldTime? suggestion) {
+        final location = suggestion!;
+        return ListTile(
+          leading: CircleAvatar(
+            radius: 17,
+            backgroundImage: AssetImage('assets/${suggestion.flag}'),
+          ),
+          title: Text(location.location),
+        );
+      },
+      onSuggestionSelected: (WorldTime? suggestion) {
+        final location = suggestion!;
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content: Text('Selected location:${location.location}'),
+          ));
+      },
+      noItemsFoundBuilder: (context) => Container(
+        height: 100,
+        child: Center(
+          child: Text(
+            'no location found:',
+          ),
+        ),
+      ),
     ),
   );
 }
