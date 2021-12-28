@@ -1,6 +1,7 @@
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:world_time/pages/choose_location.dart';
 
 class WorldTime {
@@ -34,6 +35,7 @@ class WorldTime {
       now = now.add(Duration(hours: int.parse(offset)));
       isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
       time = DateFormat.jm().format(now);
+      _savePref();
     } catch (e) {
       time = 'Could not get the time';
     }
@@ -44,5 +46,13 @@ class WorldTime {
         .where((element) =>
             element.location.toLowerCase().contains(query.toLowerCase()))
         .toList();
+  }
+
+  Future<void> _savePref() async {
+    await SharedPreferences.getInstance().then((prefs) => {
+          prefs.setString('location', location),
+          prefs.setString('flag', flag),
+          prefs.setString('url', url),
+        });
   }
 }

@@ -28,13 +28,13 @@ class _ChooseLocationState extends State<ChooseLocation>
     super.dispose();
   }
 
-  Future<void> _savePref(index) async {
-    await SharedPreferences.getInstance().then((prefs) => {
-          prefs.setString('location', locations[index].location),
-          prefs.setString('flag', locations[index].flag),
-          prefs.setString('url', locations[index].url),
-        });
-  }
+  // Future<void> _savePref(index) async {
+  //   await SharedPreferences.getInstance().then((prefs) => {
+  //         prefs.setString('location', locations[index].location),
+  //         prefs.setString('flag', locations[index].flag),
+  //         prefs.setString('url', locations[index].url),
+  //       });
+  // }
 
   void updateTime(index) async {
     WorldTime instance = locations[index];
@@ -71,7 +71,7 @@ class _ChooseLocationState extends State<ChooseLocation>
                 ),
                 onTap: () {
                   updateTime(index);
-                  _savePref(index);
+                  // _savePref(index);
                 },
                 title: Text(
                   locations[index].location,

@@ -97,6 +97,16 @@ Widget BuildSearchField(BuildContext context) {
             radius: 17,
             backgroundImage: AssetImage('assets/${suggestion.flag}'),
           ),
+          onTap: () async {
+            await location.getTime();
+            print(location.location);
+            Navigator.pushReplacementNamed(context, '/home', arguments: {
+              'location': location.location,
+              'flag': location.flag,
+              'time': location.time,
+              'isDayTime': location.isDayTime
+            });
+          },
           title: Text(location.location),
         );
       },
