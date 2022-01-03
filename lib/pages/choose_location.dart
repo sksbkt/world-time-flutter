@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:world_time/services/world_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:world_time/widgets/Modules/SearchFieldModule.dart';
+import 'package:world_time/widgets/Modules/SearchResultModule.dart';
 
 class ChooseLocation extends StatefulWidget {
   const ChooseLocation({Key? key}) : super(key: key);
@@ -81,12 +82,13 @@ class _ChooseLocationState extends State<ChooseLocation>
                         updateTime(index);
                         // _savePref(index);
                       },
-                      title: Text(
-                        locations[index].location,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[700]),
-                      ),
+                      title: searchResult(query, locations[index].location),
+                      // Text(
+                      //   locations[index].location,
+                      //   style: TextStyle(
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Colors.grey[700]),
+                      // ),
                     ),
                   ),
                 );

@@ -10,7 +10,6 @@ class WorldTime {
   late String flag;
   late String url;
   late bool isDayTime;
-  late String ss;
   static List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
     WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
@@ -21,7 +20,19 @@ class WorldTime {
     WorldTime(url: 'Asia/Seoul', location: 'Seoul', flag: 'south_korea.png'),
     WorldTime(url: 'Asia/Jakarta', location: 'Jakarta', flag: 'indonesia.png'),
   ];
+  static late List locationsNet;
   WorldTime({required this.location, required this.flag, required this.url});
+
+  static Future<void> getLocations() async {
+    try {
+      final url = Uri.parse('http://worldtimeapi.org/api/timezone/');
+      final response = await get(url);
+      locationsNet = json.decode(response.body);
+      locationsNet.forEach((element) {
+        print(element);
+      });
+    } catch (e) {}
+  }
 
   Future<void> getTime() async {
     try {
