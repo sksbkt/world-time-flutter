@@ -83,12 +83,6 @@ class _ChooseLocationState extends State<ChooseLocation>
                         // _savePref(index);
                       },
                       title: searchResult(query, locations[index].location),
-                      // Text(
-                      //   locations[index].location,
-                      //   style: TextStyle(
-                      //       fontWeight: FontWeight.bold,
-                      //       color: Colors.grey[700]),
-                      // ),
                     ),
                   ),
                 );

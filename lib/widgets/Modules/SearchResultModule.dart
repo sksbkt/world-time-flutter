@@ -6,7 +6,10 @@ Widget searchResult(String query, String text) {
     text = text
         .toLowerCase()
         .replaceAll(query.toLowerCase(), '<b>${query.toLowerCase()}</b>');
-    print(text);
+    if (text.toLowerCase().indexOf(query.toLowerCase()) == 3) {
+      String firstChar = text[3].toLowerCase();
+      text = text.replaceFirst(firstChar, firstChar.toUpperCase());
+    }
   }
   return Html(
     data: text,
