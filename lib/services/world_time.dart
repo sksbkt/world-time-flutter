@@ -9,6 +9,7 @@ class WorldTime {
   late String time;
   late String flag;
   late String url;
+  late int offsetOut;
   late bool isDayTime;
   static List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
@@ -29,23 +30,31 @@ class WorldTime {
       final response = await get(url);
       locationsNet = json.decode(response.body);
       locationsNet.forEach((element) {
-        print(element);
+        // print(element);
       });
     } catch (e) {}
   }
 
   Future<void> getTime() async {
+    DateTime diffrenece;
     try {
       Response response =
           await get(Uri.parse('http://worldtimeapi.org/api/timezone/$url'));
       Map data = jsonDecode(response.body);
       String dateTime = data['datetime'];
       String offset = data['utc_offset'].substring(1, 3);
+      DateTime dateTimeVar = DateTime.parse(dateTime);
 
       DateTime now = DateTime.parse(dateTime);
+
       now = now.add(Duration(hours: int.parse(offset)));
+      print(now);
+      offsetOut = timeDifference(now, DateTime.now());
+      print(offsetOut / 60);
+
       isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
       time = DateFormat.jm().format(now);
+
       _savePref();
     } catch (e) {
       time = 'Could not get the time';
@@ -65,5 +74,12 @@ class WorldTime {
           prefs.setString('flag', flag),
           prefs.setString('url', url),
         });
+  }
+
+  int timeDifference(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day, from.hour, from.minute);
+    to = DateTime(to.year, to.month, to.day, to.hour, to.minute);
+
+    return (to.difference(from).inMinutes);
   }
 }
