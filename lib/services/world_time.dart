@@ -42,14 +42,12 @@ class WorldTime {
           await get(Uri.parse('http://worldtimeapi.org/api/timezone/$url'));
       Map data = jsonDecode(response.body);
       String dateTime = data['datetime'];
-      String offsetHours = data['utc_offset'].substring(0, 3);
-      String offsetMins = data['utc_offset'].substring(4, 6);
+      String utc_offset = data['utc_offset'];
 
       DateTime now = DateTime.parse(dateTime);
-      now = now.add(Duration(hours: int.parse(offsetHours)));
-      now = now.add(Duration(minutes: int.parse(offsetMins)));
 
-      // offsetOut = timeDifference(now, DateTime.now());
+      now = now.add(getOffset(utc_offset)["offsetHours"]);
+      now = now.add(getOffset(utc_offset)["offsetMins"]);
 
       isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
       time = DateFormat.jm().format(now);
@@ -79,5 +77,15 @@ class WorldTime {
     to = DateTime(to.year, to.month, to.day, to.hour, to.minute);
 
     return (to.difference(from).inMinutes);
+  }
+
+  Map<String, dynamic> getOffset(String input) {
+    Duration offsetHours = Duration(hours: int.parse(input.substring(0, 3)));
+    Duration offsetMins = Duration(minutes: int.parse(input.substring(4, 6)));
+
+    return {
+      "offsetHours": offsetHours,
+      "offsetMins": offsetMins,
+    };
   }
 }
