@@ -17,6 +17,7 @@ class _LoadingState extends State<Loading> {
   late String location;
   late String flag;
   late String url;
+  late Map<String, dynamic> offset;
 
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -38,7 +39,9 @@ class _LoadingState extends State<Loading> {
       'location': instance.location,
       'flag': instance.flag,
       'time': instance.time,
-      'isDayTime': instance.isDayTime
+      'isDayTime': instance.isDayTime,
+      'offsetHours': instance.offset['offsetHours'],
+      'offsetMins': instance.offset['offsetMins'],
     });
     WorldTime.getLocations();
   }
@@ -74,6 +77,10 @@ class _LoadingState extends State<Loading> {
           location = pref.getString('location') ?? 'Berlin',
           flag = pref.getString('flag') ?? 'Germany',
           url = pref.getString('url') ?? 'Europe/Berlin',
+          offset = {
+            'offsetHours': pref.getString('offsetHours') ?? Duration(hours: 0),
+            'offsetMins': pref.getString('offsetMins') ?? Duration(minutes: 0)
+          }
         });
   }
 }

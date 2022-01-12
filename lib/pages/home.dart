@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
@@ -13,14 +16,44 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Map data = {};
+  late DateTime time;
+  late bool onTick = false;
+  late String location;
+  late Timer _timer;
+  late int offsethours;
+  late int offsetMins;
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(Duration.zero, () {
+      data = data.isNotEmpty
+          ? data
+          : ModalRoute.of(context)?.settings.arguments as Map;
+      updateTime();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    print('dispose');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     data = data.isNotEmpty
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
-
+    offsethours = data['offsetHours'];
+    // offsetMins = int.parse(data['offsetMins']);
     String bgImage = data['isDayTime'] ? 'assets/day.png' : 'assets/night.png';
     Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[800];
+    if (!onTick) time = DateTime.parse(data['time']);
+    onTick = true;
+
     return Scaffold(
       backgroundColor: bgColor,
       drawer: NavigationDrawerWidget(
@@ -43,10 +76,13 @@ class _HomeState extends State<Home> {
                       dynamic result =
                           await Navigator.pushNamed(context, '/location');
                       setState(() {
+                        onTick = false;
                         data = {
                           'time': result['time'],
                           'location': result['location'],
                           'flag': result['flag'],
+                          'offsetHours': result['offsetHours'],
+                          'offsetMins': result['offsetMins'],
                           'isDayTime': result['isDayTime'],
                         };
                       });
@@ -79,7 +115,7 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      data['time'],
+                      DateFormat.jms().format(time),
                       style: TextStyle(fontSize: 66, color: Colors.white),
                     )
                   ],
@@ -90,5 +126,22 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  updateTime() {
+    _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
+      DateTime currentTime =
+          DateTime.now().toUtc().add(Duration(hours: offsethours));
+      print(time);
+      print(currentTime);
+
+      // print(currentTime);
+      if (time != currentTime) {
+        print('time changed');
+        setState(() {
+          time = currentTime;
+        });
+      }
+    });
   }
 }

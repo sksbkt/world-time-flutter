@@ -47,6 +47,8 @@ class _ChooseLocationState extends State<ChooseLocation>
       'location': instance.location,
       'flag': instance.flag,
       'time': instance.time,
+      'offsetHours': instance.offset['offsetHours'],
+      'offsetMins': instance.offset['offsetMins'],
       'isDayTime': instance.isDayTime
     });
   }

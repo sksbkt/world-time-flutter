@@ -11,6 +11,7 @@ class WorldTime {
   late String url;
   late int offsetOut;
   late bool isDayTime;
+  late Map<String, dynamic> offset;
   static List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
     WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
@@ -46,11 +47,12 @@ class WorldTime {
 
       DateTime now = DateTime.parse(dateTime);
 
-      now = now.add(getOffset(utc_offset)["offsetHours"]);
-      now = now.add(getOffset(utc_offset)["offsetMins"]);
+      now = now.add(Duration(hours: getOffset(utc_offset)["offsetHours"]));
+      now = now.add(Duration(minutes: getOffset(utc_offset)["offsetMins"]));
 
       isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
-      time = DateFormat.jm().format(now);
+      time = now.toString();
+      // DateFormat.jm().format(now);
       _savePref();
     } catch (e) {
       time = 'Error';
@@ -69,23 +71,18 @@ class WorldTime {
           prefs.setString('location', location),
           prefs.setString('flag', flag),
           prefs.setString('url', url),
+          prefs.setString('offsetHours', offset['offsetHours'].toString()),
+          prefs.setString('offsetMins', offset['offsetMins'].toString()),
         });
   }
 
-  int timeDifference(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day, from.hour, from.minute);
-    to = DateTime(to.year, to.month, to.day, to.hour, to.minute);
-
-    return (to.difference(from).inMinutes);
-  }
-
   Map<String, dynamic> getOffset(String input) {
-    Duration offsetHours = Duration(hours: int.parse(input.substring(0, 3)));
-    Duration offsetMins = Duration(minutes: int.parse(input.substring(4, 6)));
-
-    return {
+    int offsetHours = int.parse(input.substring(0, 3));
+    int offsetMins = int.parse(input.substring(4, 6));
+    this.offset = {
       "offsetHours": offsetHours,
       "offsetMins": offsetMins,
     };
+    return this.offset;
   }
 }
