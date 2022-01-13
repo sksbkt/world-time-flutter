@@ -9,22 +9,30 @@ import 'package:world_time/pages/loading.dart';
 import 'package:world_time/pages/schedule.dart';
 import 'package:world_time/pages/time_deck.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
+import 'package:world_time/services/TimeProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider(
-    create: (context) => GoogleSingInProvider(),
-    child: MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Loading(),
-        '/home': (context) => Home(),
-        '/location': (context) => ChooseLocation(),
-        '/account': (context) => account(),
-        '/schedule': (context) => Schedule(),
-        '/time_deck': (context) => TimeDeck(),
-      },
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<GoogleSingInProvider>(
+            create: (context) => GoogleSingInProvider()),
+        // Provider<TimeUpdater>(create: (context) => TimeUpdater()),
+        ChangeNotifierProvider(create: (context) => TimeUpdater())
+      ],
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Loading(),
+          '/home': (context) => Home(),
+          '/location': (context) => ChooseLocation(),
+          '/account': (context) => account(),
+          '/schedule': (context) => Schedule(),
+          '/time_deck': (context) => TimeDeck(),
+        },
+      ),
     ),
-  ));
+  );
 }

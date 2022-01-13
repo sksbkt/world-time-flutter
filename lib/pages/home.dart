@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
+import 'package:world_time/services/TimeProvider.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
 
 class Home extends StatefulWidget {
@@ -17,27 +18,27 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map data = {};
   late DateTime time;
-  late bool onTick = false;
+  // late bool onTick = false;
   late String location;
-  late Timer _timer;
+  // late Timer _timer;
   late int offsethours;
   late int offsetMins;
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(Duration.zero, () {
-      data = data.isNotEmpty
-          ? data
-          : ModalRoute.of(context)?.settings.arguments as Map;
-      updateTime();
-    });
+    // Future.delayed(Duration.zero, () {
+    //   data = data.isNotEmpty
+    //       ? data
+    //       : ModalRoute.of(context)?.settings.arguments as Map;
+    //   updateTime();
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer.cancel();
+    // _timer.cancel();
     print('dispose');
     super.dispose();
   }
@@ -48,12 +49,15 @@ class _HomeState extends State<Home> {
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
     offsethours = data['offsetHours'];
+    offsetMins = data['offsetMins'];
     // offsetMins = int.parse(data['offsetMins']);
     String bgImage = data['isDayTime'] ? 'assets/day.png' : 'assets/night.png';
     Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[800];
-    if (!onTick) time = DateTime.parse(data['time']);
-    onTick = true;
+    // if (!onTick) time = DateTime.parse(data['time']);
+    // onTick = true;
 
+    final proTime = Provider.of<TimeUpdater>(context, listen: false);
+    proTime.updateTime(offsethours, offsetMins);
     return Scaffold(
       backgroundColor: bgColor,
       drawer: NavigationDrawerWidget(
@@ -76,7 +80,7 @@ class _HomeState extends State<Home> {
                       dynamic result =
                           await Navigator.pushNamed(context, '/location');
                       setState(() {
-                        onTick = false;
+                        // onTick = false;
                         data = {
                           'time': result['time'],
                           'location': result['location'],
@@ -114,9 +118,11 @@ class _HomeState extends State<Home> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      DateFormat.jms().format(time),
-                      style: TextStyle(fontSize: 66, color: Colors.white),
+                    Consumer<TimeUpdater>(
+                      builder: (context, TimeUpdater, child) => Text(
+                        DateFormat.jms().format(proTime.time),
+                        style: TextStyle(fontSize: 66, color: Colors.white),
+                      ),
                     )
                   ],
                 ),
@@ -128,20 +134,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  updateTime() {
-    _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
-      DateTime currentTime =
-          DateTime.now().toUtc().add(Duration(hours: offsethours));
-      print(time);
-      print(currentTime);
-
-      // print(currentTime);
-      if (time != currentTime) {
-        print('time changed');
-        setState(() {
-          time = currentTime;
-        });
-      }
-    });
-  }
+  // updateTime() {
+  //   _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
+  //     DateTime currentTime =
+  //         DateTime.now().toUtc().add(Duration(hours: offsethours));
+  //     // print(time);
+  //     // print(currentTime);
+  //
+  //     // print(currentTime);
+  //     if (time != currentTime) {
+  //       // print('time changed');
+  //       setState(() {
+  //         time = currentTime;
+  //       });
+  //     }
+  //   });
+  // }
 }
