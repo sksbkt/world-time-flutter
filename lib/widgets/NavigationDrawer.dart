@@ -28,7 +28,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                 BuildMenuItem(
                     text: 'Time deck',
                     icon: FontAwesomeIcons.clock,
-                    onClick: () => selectedItem(context, 1))
+                    onClick: () => selectedItem(context, 1)),
+                BuildMenuItem(
+                    text: 'Settings',
+                    icon: FontAwesomeIcons.cog,
+                    onClick: () => selectedItem(context, 2)),
               ],
             )));
   }
@@ -150,6 +154,7 @@ Widget BuildMenuItem(
 }
 
 void selectedItem(BuildContext context, int index) {
+  // print(index);
   Navigator.of(context)
       .pop(); //closes the navigation menu before switchiing pages
   switch (index) {
@@ -158,6 +163,9 @@ void selectedItem(BuildContext context, int index) {
       break;
     case 1:
       Navigator.of(context).pushNamed('/time_deck');
+      break;
+    case 2:
+      Navigator.of(context).pushNamed('/Settings');
       break;
   }
 }

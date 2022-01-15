@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Consumer<TimeUpdater>(
                       builder: (context, TimeUpdater, child) => Text(
-                        DateFormat.jms().format(proTime.time),
+                        proTime.getTime(),
                         style: TextStyle(fontSize: 66, color: Colors.white),
                       ),
                     )
@@ -133,21 +133,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  // updateTime() {
-  //   _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
-  //     DateTime currentTime =
-  //         DateTime.now().toUtc().add(Duration(hours: offsethours));
-  //     // print(time);
-  //     // print(currentTime);
-  //
-  //     // print(currentTime);
-  //     if (time != currentTime) {
-  //       // print('time changed');
-  //       setState(() {
-  //         time = currentTime;
-  //       });
-  //     }
-  //   });
-  // }
 }
