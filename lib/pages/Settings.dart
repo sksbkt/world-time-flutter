@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/TimeProvider.dart';
 import 'package:world_time/utilities/Themes.dart';
@@ -34,15 +35,16 @@ class _SettingsState extends State<Settings> {
                   }),
             ),
             ListTile(
-              title: Text('Time format'),
+              title: Text('Date format'),
               trailing: DropdownButton<String>(
-                value: proTime.dateFormat,
-                items: <String>['jm', 'jms'].map((String value) {
+                value: proTime.dateFormatString,
+                items: <String>['7/10/1996', 'July 10, 1996', 'off']
+                    .map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                     onTap: () {
-                      proTime.changeDateformat(value);
+                      proTime.switchDateFormatString(value);
                     },
                   );
                 }).toList(),
@@ -52,11 +54,19 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              title: Text('24'),
+              title: Text('24 / 12'),
               trailing: Switch.adaptive(
                   value: proTime.hoursFormat24,
                   onChanged: (value) {
                     proTime.toggleHoursFormat24(value);
+                  }),
+            ),
+            ListTile(
+              title: Text('Show seconds'),
+              trailing: Switch.adaptive(
+                  value: proTime.showSeconds,
+                  onChanged: (value) {
+                    proTime.toggleShowSeconds(value);
                   }),
             ),
           ],

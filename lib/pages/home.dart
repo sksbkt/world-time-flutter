@@ -119,9 +119,20 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Consumer<TimeUpdater>(
-                      builder: (context, TimeUpdater, child) => Text(
-                        proTime.getTime(),
-                        style: TextStyle(fontSize: 66, color: Colors.white),
+                      builder: (context, TimeUpdater, child) => Column(
+                        children: [
+                          Text(
+                            proTime.getTime(),
+                            style: TextStyle(fontSize: 66, color: Colors.white),
+                          ),
+                          Text(
+                            proTime.getDate(),
+                            style: TextStyle(
+                                fontSize: 23,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        ],
                       ),
                     )
                   ],
