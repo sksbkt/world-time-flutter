@@ -159,7 +159,7 @@ void selectedItem(BuildContext context, int index) {
       .pop(); //closes the navigation menu before switchiing pages
   switch (index) {
     case 0:
-      Navigator.of(context).pushNamed('/schedule');
+      Navigator.of(context).pushNamed('/calendar');
       break;
     case 1:
       Navigator.of(context).pushNamed('/time_deck');

@@ -8,14 +8,14 @@ class TimeUpdater with ChangeNotifier {
 
   bool hoursFormat24 = false;
   bool showSeconds = true;
+  bool showDay = true;
 
-  Map<String, String> dateFormat = {
+  Map<String, dynamic> dateFormat = {
     'off': '',
-    '7/10/1996': 'yMd',
-    'July 10, 1996': 'yMMMMd'
+    '7/10/1996': 'd M y',
+    'July 10, 1996': 'd MMMM y'
   };
   String dateFormatString = 'off';
-  DateFormat dateFormater = DateFormat('yMd');
 
   DateFormat format = DateFormat.jm();
   Timer _timer = Timer.periodic(Duration.zero, (timer) {});
@@ -38,12 +38,13 @@ class TimeUpdater with ChangeNotifier {
   }
 
   String getDate() {
-    return (dateFormater).format(time);
+    return DateFormat(getDay() + ' ' + dateFormat[dateFormatString])
+        .format(time);
   }
 
   void switchDateFormatString(String value) {
     dateFormatString = value;
-    dateFormater = DateFormat(dateFormat[value]);
+    print(dateFormatString);
   }
 
   String getDateFormatValue() {
@@ -64,11 +65,20 @@ class TimeUpdater with ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleShowDay(bool value) {
+    showDay = value;
+    notifyListeners();
+  }
+
   String getHour() {
     return hoursFormat24 ? 'H' : 'j';
   }
 
   String getSeconds() {
     return showSeconds ? 's' : '';
+  }
+
+  String getDay() {
+    return showDay ? 'E' : '';
   }
 }

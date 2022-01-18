@@ -69,6 +69,14 @@ class _SettingsState extends State<Settings> {
                     proTime.toggleShowSeconds(value);
                   }),
             ),
+            ListTile(
+              title: Text('Show day of the week'),
+              trailing: Switch.adaptive(
+                  value: proTime.showDay,
+                  onChanged: (value) {
+                    proTime.toggleShowDay(value);
+                  }),
+            ),
           ],
         ),
       )),

@@ -5,9 +5,10 @@ import 'package:world_time/pages/Settings.dart';
 import 'package:world_time/pages/account.dart';
 
 import 'package:world_time/pages/choose_location.dart';
+import 'package:world_time/pages/event_editing_page.dart';
 import 'package:world_time/pages/home.dart';
 import 'package:world_time/pages/loading.dart';
-import 'package:world_time/pages/schedule.dart';
+import 'package:world_time/pages/Calendar.dart';
 import 'package:world_time/pages/time_deck.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
@@ -38,17 +39,18 @@ class timeApp extends StatelessWidget {
         final themeProvider = Provider.of<ThemeProvider>(context);
 
         return MaterialApp(
-          initialRoute: '/',
+          initialRoute: '/EventEditingPage',
           routes: {
-            '/': (context) => Loading(),
+            // '/': (context) => Loading(),
             '/home': (context) => Home(),
             '/location': (context) => ChooseLocation(),
             '/account': (context) => account(),
-            '/schedule': (context) => Schedule(),
+            '/calendar': (context) => Calendar(),
+            '/EventEditingPage': (context) => EventEditingPage(),
             '/time_deck': (context) => TimeDeck(),
             '/Settings': (context) => Settings(),
           },
-          theme: MyThemes.lightTheme,
+          theme: MyThemes.darkTheme,
           darkTheme: MyThemes.darkTheme,
           themeMode: themeProvider.themeMode,
         );
