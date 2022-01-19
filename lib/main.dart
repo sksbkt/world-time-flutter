@@ -17,7 +17,6 @@ import 'package:world_time/utilities/Themes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp(timeApp());
 }
 

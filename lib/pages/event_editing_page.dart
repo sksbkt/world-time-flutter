@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:world_time/utilities/Utils.dart';
 import 'package:world_time/utilities/event.dart';
 
 class EventEditingPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   @override
   void initState() {
     // TODO: implement initState
+
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
@@ -44,11 +46,17 @@ class _EventEditingPageState extends State<EventEditingPage> {
         actions: builEditingActions(),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(2),
+        padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: [buildTitle()],
+          children: [
+            buildTitle(),
+            SizedBox(
+              height: 20,
+            ),
+            buildDateTimePickers(),
+          ],
         ),
       ),
     );
@@ -69,7 +77,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     return TextFormField(
       style: TextStyle(fontSize: 24),
       decoration: InputDecoration(
-          border: UnderlineInputBorder(), hintText: 'Enter a title'),
+          border: UnderlineInputBorder(), hintText: 'Add title'),
       onFieldSubmitted: (_) {},
       controller: titleController,
       validator: (title) {
@@ -77,4 +85,68 @@ class _EventEditingPageState extends State<EventEditingPage> {
       },
     );
   }
+
+  Widget buildDateTimePickers() => Column(
+        children: [
+          SizedBox(
+            height: 5,
+          ),
+          buildFrom(),
+          buildTo()
+        ],
+      );
+  Widget buildFrom() => buildHeader(
+      header: 'From',
+      headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: buildDropDownField(
+                  text: Utils.toDate(fromDate), onClicked: () {})),
+          Expanded(
+              flex: 1,
+              child: buildDropDownField(
+                  text: Utils.toTime(fromDate), onClicked: () {})),
+        ],
+      ));
+  Widget buildTo() => buildHeader(
+      header: 'To',
+      headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: buildDropDownField(
+                  text: Utils.toDate(toDate), onClicked: () {})),
+          Expanded(
+              flex: 1,
+              child: buildDropDownField(
+                  text: Utils.toTime(toDate), onClicked: () {})),
+        ],
+      ));
+  Widget buildDropDownField(
+          {required String text, required VoidCallback onClicked}) =>
+      ListTile(
+        title: Text(text),
+        trailing: Icon(Icons.arrow_drop_down),
+        onTap: onClicked,
+      );
+  Widget buildHeader(
+          {required String header,
+          required Widget child,
+          TextStyle? headerStyle}) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              header,
+              style: headerStyle,
+            ),
+          ),
+          child
+        ],
+      );
 }
