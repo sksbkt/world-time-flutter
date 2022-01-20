@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/shims/dart_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:world_time/utilities/Utils.dart';
 import 'package:world_time/utilities/event.dart';
@@ -91,40 +92,61 @@ class _EventEditingPageState extends State<EventEditingPage> {
           SizedBox(
             height: 5,
           ),
-          buildFrom(),
-          buildTo()
+          buildFrom(
+            header: 'From',
+            dateTime: fromDate,
+            OnTapStarting: () =>
+                pickerDateTime(pickingFrom: true, pickDate: true),
+            OntapEnding: () =>
+                pickerDateTime(pickingFrom: true, pickDate: false),
+          ),
+          buildFrom(
+            header: 'to',
+            dateTime: toDate,
+            OnTapStarting: () =>
+                pickerDateTime(pickingFrom: false, pickDate: true),
+            OntapEnding: () =>
+                pickerDateTime(pickingFrom: false, pickDate: true),
+          )
+          // buildTo()
         ],
       );
-  Widget buildFrom() => buildHeader(
-      header: 'From',
-      headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 2,
-              child: buildDropDownField(
-                  text: Utils.toDate(fromDate), onClicked: () {})),
-          Expanded(
-              flex: 1,
-              child: buildDropDownField(
-                  text: Utils.toTime(fromDate), onClicked: () {})),
-        ],
-      ));
-  Widget buildTo() => buildHeader(
-      header: 'To',
-      headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 2,
-              child: buildDropDownField(
-                  text: Utils.toDate(toDate), onClicked: () {})),
-          Expanded(
-              flex: 1,
-              child: buildDropDownField(
-                  text: Utils.toTime(toDate), onClicked: () {})),
-        ],
-      ));
+  Widget buildFrom({
+    required String header,
+    required DateTime dateTime,
+    required VoidCallback OnTapStarting,
+    required VoidCallback OntapEnding,
+  }) =>
+      buildHeader(
+          header: header,
+          headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: buildDropDownField(
+                      text: Utils.toDate(dateTime), onClicked: OnTapStarting)),
+              Expanded(
+                  flex: 1,
+                  child: buildDropDownField(
+                      text: Utils.toTime(dateTime), onClicked: OntapEnding)),
+            ],
+          ));
+  // Widget buildTo() => buildHeader(
+  //     header: 'To',
+  //     headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+  //     child: Row(
+  //       children: [
+  //         Expanded(
+  //             flex: 2,
+  //             child: buildDropDownField(
+  //                 text: Utils.toDate(toDate), onClicked: () {})),
+  //         Expanded(
+  //             flex: 1,
+  //             child: buildDropDownField(
+  //                 text: Utils.toTime(toDate), onClicked: () {})),
+  //       ],
+  //     ));
   Widget buildDropDownField(
           {required String text, required VoidCallback onClicked}) =>
       ListTile(
@@ -149,4 +171,48 @@ class _EventEditingPageState extends State<EventEditingPage> {
           child
         ],
       );
+
+  Future pickerDateTime(
+      {required bool pickingFrom, required bool pickDate}) async {
+    if (pickingFrom) {
+      final date = await pickDateTime(fromDate, pickDate: pickDate);
+      if (date == null) return;
+      if (date.isAfter(toDate)) {
+        toDate = date;
+      }
+      setState(() {
+        fromDate = date;
+      });
+    } else {
+      final date =
+          await pickDateTime(toDate, pickDate: pickDate, firstDate: fromDate);
+      if (date == null) return;
+      setState(() {
+        toDate = date;
+      });
+    }
+  }
+
+  Future<DateTime?> pickDateTime(DateTime initialDate,
+      {required bool pickDate, DateTime? firstDate}) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: firstDate ?? DateTime(2015),
+          lastDate: DateTime(2101));
+      if (date == null) return null;
+      final time =
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
+      return date.add(time);
+    } else {
+      final timeOfDay = await showTimePicker(
+          context: context, initialTime: TimeOfDay.fromDateTime(initialDate));
+      if (timeOfDay == null) return null;
+      final date =
+          DateTime(initialDate.year, initialDate.month, initialDate.day);
+      final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
+      return date.add(time);
+    }
+  }
 }
