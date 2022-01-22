@@ -3,6 +3,8 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/utilities/Utils.dart';
 import 'package:world_time/utilities/event.dart';
 
@@ -16,6 +18,7 @@ class EventEditingPage extends StatefulWidget {
 }
 
 class _EventEditingPageState extends State<EventEditingPage> {
+  final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
@@ -48,6 +51,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -214,5 +218,18 @@ class _EventEditingPageState extends State<EventEditingPage> {
       final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
       return date.add(time);
     }
+  }
+
+  Future saveForm() async {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      final event = Event(
+          title: titleController.text,
+          description: 's',
+          from: fromDate,
+          to: toDate,
+          isAllDay: false);
+    }
+    final provider = Provider.of<EventProvider>(context, listen: false);
   }
 }

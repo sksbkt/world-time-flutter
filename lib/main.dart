@@ -10,6 +10,7 @@ import 'package:world_time/pages/home.dart';
 import 'package:world_time/pages/loading.dart';
 import 'package:world_time/pages/Calendar.dart';
 import 'package:world_time/pages/time_deck.dart';
+import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
 import 'package:world_time/utilities/Themes.dart';
@@ -33,6 +34,7 @@ class timeApp extends StatelessWidget {
         // Provider<TimeUpdater>(create: (context) => TimeUpdater()),
         ChangeNotifierProvider(create: (context) => TimeUpdater()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => EventProvider()),
       ],
       child: Builder(builder: (context) {
         final themeProvider = Provider.of<ThemeProvider>(context);
