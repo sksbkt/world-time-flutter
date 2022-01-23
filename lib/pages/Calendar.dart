@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:world_time/services/EventProvider.dart';
+import 'package:world_time/utilities/EventDataSource.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
 
 class Calendar extends StatelessWidget {
@@ -13,6 +16,7 @@ class Calendar extends StatelessWidget {
 // class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
+    final events = Provider.of<EventProvider>(context).events;
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
@@ -20,6 +24,7 @@ class Calendar extends StatelessWidget {
       ),
       body: SfCalendar(
         view: CalendarView.month,
+        dataSource: EventDataSource(events),
         cellBorderColor: Colors.transparent,
         onTap: (calendarTapDetails) {
           print(calendarTapDetails.appointments);

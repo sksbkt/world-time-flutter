@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/utilities/Utils.dart';
-import 'package:world_time/utilities/event.dart';
+import 'package:world_time/utilities/Event.dart';
 
 class EventEditingPage extends StatefulWidget {
   final Event? event;
@@ -72,7 +72,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
               primary: Colors.transparent, shadowColor: Colors.transparent),
-          onPressed: () {},
+          onPressed: saveForm,
           icon: Icon(FontAwesomeIcons.check),
           label: Text('Save'))
     ];
@@ -83,7 +83,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       style: TextStyle(fontSize: 24),
       decoration: InputDecoration(
           border: UnderlineInputBorder(), hintText: 'Add title'),
-      onFieldSubmitted: (_) {},
+      onFieldSubmitted: (_) => saveForm(),
       controller: titleController,
       validator: (title) {
         return title != null && title.isNotEmpty ? 'Title is empty' : null;
@@ -229,7 +229,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
           from: fromDate,
           to: toDate,
           isAllDay: false);
+      final provider = Provider.of<EventProvider>(context, listen: false);
+      provider.addEvent(event);
+      Navigator.of(context).pop();
     }
-    final provider = Provider.of<EventProvider>(context, listen: false);
   }
 }
