@@ -40,7 +40,7 @@ class timeApp extends StatelessWidget {
         final themeProvider = Provider.of<ThemeProvider>(context);
 
         return MaterialApp(
-          initialRoute: '/EventEditingPage',
+          initialRoute: '/calendar',
           routes: {
             // '/': (context) => Loading(),
             '/home': (context) => Home(),

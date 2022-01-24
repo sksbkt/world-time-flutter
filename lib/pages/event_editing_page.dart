@@ -51,17 +51,19 @@ class _EventEditingPageState extends State<EventEditingPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildTitle(),
-            SizedBox(
-              height: 20,
-            ),
-            buildDateTimePickers(),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildTitle(),
+              SizedBox(
+                height: 20,
+              ),
+              buildDateTimePickers(),
+            ],
+          ),
         ),
       ),
     );
@@ -86,7 +88,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       onFieldSubmitted: (_) => saveForm(),
       controller: titleController,
       validator: (title) {
-        return title != null && title.isNotEmpty ? 'Title is empty' : null;
+        return title == null || title.isEmpty ? 'Title is empty' : null;
       },
     );
   }
@@ -229,6 +231,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
           from: fromDate,
           to: toDate,
           isAllDay: false);
+      print(
+          event.title + ":" + event.description + ":" + event.from.toString());
       final provider = Provider.of<EventProvider>(context, listen: false);
       provider.addEvent(event);
       Navigator.of(context).pop();
