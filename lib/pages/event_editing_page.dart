@@ -84,7 +84,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     return TextFormField(
       style: TextStyle(fontSize: 24),
       decoration: InputDecoration(
-          border: UnderlineInputBorder(), hintText: 'Add title'),
+          border: UnderlineInputBorder(), hintText: 'Add a title'),
       onFieldSubmitted: (_) => saveForm(),
       controller: titleController,
       validator: (title) {
@@ -112,7 +112,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
             OnTapStarting: () =>
                 pickerDateTime(pickingFrom: false, pickDate: true),
             OntapEnding: () =>
-                pickerDateTime(pickingFrom: false, pickDate: true),
+                pickerDateTime(pickingFrom: false, pickDate: false),
           )
           // buildTo()
         ],

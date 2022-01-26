@@ -42,6 +42,7 @@ dependencies:
   flutter_typeahead: ^3.2.4
   flutter_html: ^2.2.1
   syncfusion_flutter_calendar: ^19.4.43
+  syncfusion_flutter_core: ^19.4.47
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
