@@ -6,6 +6,7 @@ import 'package:world_time/pages/account.dart';
 
 import 'package:world_time/pages/choose_location.dart';
 import 'package:world_time/pages/event_editing_page.dart';
+import 'package:world_time/pages/event_viewing_page.dart';
 import 'package:world_time/pages/home.dart';
 import 'package:world_time/pages/loading.dart';
 import 'package:world_time/pages/Calendar.dart';
@@ -13,6 +14,7 @@ import 'package:world_time/pages/time_deck.dart';
 import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
+import 'package:world_time/utilities/Event.dart';
 import 'package:world_time/utilities/Themes.dart';
 
 void main() async {
@@ -48,6 +50,7 @@ class timeApp extends StatelessWidget {
             '/account': (context) => account(),
             '/calendar': (context) => Calendar(),
             '/EventEditingPage': (context) => EventEditingPage(),
+            // '/EventViewingPage': (context) => EventViewingPage(),
             '/time_deck': (context) => TimeDeck(),
             '/Settings': (context) => Settings(),
           },

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:world_time/pages/event_viewing_page.dart';
 
 import 'package:world_time/services/EventProvider.dart';
+import 'package:world_time/utilities/Event.dart';
 import 'package:world_time/utilities/EventDataSource.dart';
 
 class TasksWidget extends StatefulWidget {
@@ -36,7 +38,12 @@ class _TasksWidgetState extends State<TasksWidget> {
           headerHeight: 0,
           selectionDecoration:
               BoxDecoration(color: Colors.white.withOpacity(0.2)),
-          onTap: (details) {},
+          onTap: (details) {
+            if (details.appointments == null) return;
+            final event = details.appointments!.first;
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EventViewingPage(event: event)));
+          },
         ));
   }
 

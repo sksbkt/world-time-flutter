@@ -25,13 +25,16 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
+    super.initState();
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
+    } else {
+      final event = widget.event!;
+      titleController.text = event.title;
+      fromDate = event.from;
+      toDate = event.to;
     }
-    super.initState();
   }
 
   @override
@@ -117,6 +120,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
           // buildTo()
         ],
       );
+
   Widget buildFrom({
     required String header,
     required DateTime dateTime,
@@ -138,6 +142,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
                       text: Utils.toTime(dateTime), onClicked: OntapEnding)),
             ],
           ));
+
   // Widget buildTo() => buildHeader(
   //     header: 'To',
   //     headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
@@ -160,6 +165,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
         trailing: Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );
+
   Widget buildHeader(
           {required String header,
           required Widget child,
@@ -233,8 +239,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
           isAllDay: false);
       print(
           event.title + ":" + event.description + ":" + event.from.toString());
+      final isEditing = widget.event != null;
+
       final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
+      if (isEditing) {
+        provider.editEvent(event, widget.event!);
+      } else {
+        provider.addEvent(event);
+      }
       Navigator.of(context).pop();
     }
   }
