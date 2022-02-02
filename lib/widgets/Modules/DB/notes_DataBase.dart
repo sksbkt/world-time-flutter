@@ -1,5 +1,8 @@
+import 'dart:core';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:world_time/utilities/Note.dart';
+import 'package:path/path.dart';
 
 class NotesDatabase {
   static final NotesDatabase instance = NotesDatabase._init();
@@ -64,6 +67,32 @@ class NotesDatabase {
       return Note.fromJsom(map.first);
     else
       throw Exception('ID $id not found');
+  }
+
+  Future<List<Note>> readAllNotes() async {
+    final db = await instance.database;
+
+    final orderByStr = '${NoteFields.time} ASC';
+
+    ///if we want to make our custom query via direct query input we can do this
+    // final result =
+    //     await db.rawQuery('SELECT FROM $tableNotes ORDER BY $orderByStr');
+
+    final result = await db.query(tableNotes, orderBy: orderByStr);
+
+    return result.map((e) => Note.fromJsom(e)).toList();
+  }
+
+  Future<int> update(Note note) async {
+    final db = await instance.database;
+    return await db.update(tableNotes, note.toJson(),
+        where: '${NoteFields.id} = ?', whereArgs: [note.id]);
+  }
+
+  Future<int> delete(int id) async {
+    final db = await instance.database;
+    return await db
+        .delete(tableNotes, where: '$NoteFields.id = ?', whereArgs: [id]);
   }
 
   Future close() async {
