@@ -1,17 +1,18 @@
 import 'dart:core';
 
 import 'package:sqflite/sqflite.dart';
-import 'package:world_time/utilities/Note.dart';
+import 'package:world_time/utilities/Event.dart';
 import 'package:path/path.dart';
+// import 'package:world_time/utilities/Note.dart';
 
-class NotesDatabase {
-  static final NotesDatabase instance = NotesDatabase._init();
+class EventsDatabase {
+  static final EventsDatabase instance = EventsDatabase._init();
   static Database? _database;
-  NotesDatabase._init();
+  EventsDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('notes');
+    _database = await _initDB('appointments');
     return _database!;
   }
 
@@ -27,18 +28,28 @@ class NotesDatabase {
     final intType = 'INTEGER NOT NULL';
     final textType = 'TEXT NOT NULL';
 
-    await db.execute('''CREATE TABLE $tableNotes(
-    ${NoteFields.id}$idType,
-    ${NoteFields.isImportant}$boolType,
-    ${NoteFields.number}$intType,
-    ${NoteFields.title}$textType,
-    ${NoteFields.description}$textType,
-    ${NoteFields.time}$textType,
+    await db.execute('''CREATE TABLE $tableEvents(
+    ${EventFields.id}$idType,
+    ${EventFields.title}$textType,
+    ${EventFields.description}$textType,
+    ${EventFields.isAllDay}$boolType,
+    ${EventFields.backgroundColor}$textType,
+    ${EventFields.from}$intType,
+    ${EventFields.to}$textType,
     
     )''');
+    // await db.execute('''CREATE TABLE $tableNotes(
+    // ${NoteFields.id}$idType,
+    // ${NoteFields.isImportant}$boolType,
+    // ${NoteFields.number}$intType,
+    // ${NoteFields.title}$textType,
+    // ${NoteFields.description}$textType,
+    // ${NoteFields.time}$textType,
+    //
+    // )''');
   }
 
-  Future<Note> create(Note note) async {
+  Future<Event> create(Event event) async {
     final db = await instance.database;
 
     /// inserting specific columns values
@@ -52,47 +63,47 @@ class NotesDatabase {
     // final id = await db
     //     .rawInsert('INSERT INTO $tableNotes ($columns) VALUES($values)');
 
-    final id = await db.insert(tableNotes, note.toJson());
-    return note.copy(id: id);
+    final id = await db.insert(tableEvents, event.toJson());
+    return event.copy(id: id);
   }
 
-  Future<Note> readNote(int id) async {
+  Future<Event> readNote(int id) async {
     final db = await instance.database;
-    final map = await db.query(tableNotes,
-        columns: NoteFields.values, where: '${NoteFields.id}= ?',
+    final map = await db.query(tableEvents,
+        columns: EventFields.values, where: '${EventFields.id}= ?',
 
         ///we put values like this in whereArgs instead of the where so we prevent the SQL injections, for more values just put more '?' marks and add the paramater to whereArgs array
         whereArgs: [id]);
     if (map.isNotEmpty)
-      return Note.fromJsom(map.first);
+      return Event.fromJson(map.first);
     else
       throw Exception('ID $id not found');
   }
 
-  Future<List<Note>> readAllNotes() async {
+  Future<List<Event>> readAllNotes() async {
     final db = await instance.database;
 
-    final orderByStr = '${NoteFields.time} ASC';
+    final orderByStr = '${EventFields.from} ASC';
 
     ///if we want to make our custom query via direct query input we can do this
     // final result =
     //     await db.rawQuery('SELECT FROM $tableNotes ORDER BY $orderByStr');
 
-    final result = await db.query(tableNotes, orderBy: orderByStr);
+    final result = await db.query(tableEvents, orderBy: orderByStr);
 
-    return result.map((e) => Note.fromJsom(e)).toList();
+    return result.map((e) => Event.fromJson(e)).toList();
   }
 
-  Future<int> update(Note note) async {
+  Future<int> update(Event event) async {
     final db = await instance.database;
-    return await db.update(tableNotes, note.toJson(),
-        where: '${NoteFields.id} = ?', whereArgs: [note.id]);
+    return await db.update(tableEvents, event.toJson(),
+        where: '${EventFields.id} = ?', whereArgs: [event.id]);
   }
 
   Future<int> delete(int id) async {
     final db = await instance.database;
     return await db
-        .delete(tableNotes, where: '$NoteFields.id = ?', whereArgs: [id]);
+        .delete(tableEvents, where: '${EventFields.id} = ?', whereArgs: [id]);
   }
 
   Future close() async {
