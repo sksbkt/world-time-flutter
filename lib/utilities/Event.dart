@@ -18,8 +18,9 @@ class EventFields {
   static final String title = 'title';
   static final String description = 'description';
   static final String backgroundColor = 'backgroundColor';
-  static final String from = 'from';
-  static final String to = 'to';
+  static final String from =
+      'fromDate'; //from is reserved word in sql, be careful while working around reserved words
+  static final String to = 'toDate';
 }
 
 class Event {

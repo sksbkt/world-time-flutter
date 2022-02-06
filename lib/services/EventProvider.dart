@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:world_time/utilities/Event.dart';
+import 'package:world_time/widgets/Modules/DB/Events_DataBase.dart';
 
 class EventProvider extends ChangeNotifier {
   final List<Event> _events = [];
-  List<Event> get events => _events;
+
+  // List<Event> get events => _events;
+  Future<List<Event>> get events async {
+    return await EventsDatabase.instance.readAllEvent();
+  }
 
   DateTime _selectedDate = DateTime.now();
   DateTime get seletedDate => _selectedDate;
@@ -16,12 +21,15 @@ class EventProvider extends ChangeNotifier {
   }
 
   void editEvent(Event newEvent, Event oldEvent) {
-    final index = events.indexOf(oldEvent);
-    events[index] = newEvent;
+    EventsDatabase.instance.update(newEvent);
+
+    // final index = events.indexOf(oldEvent);
+    // events[index] = newEvent;
     notifyListeners();
   }
 
   void deleteEvent(Event event) {
+    EventsDatabase.instance.delete(event.id);
     _events.remove(event);
     notifyListeners();
   }

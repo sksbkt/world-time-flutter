@@ -27,17 +27,17 @@ class EventsDatabase {
     final boolType = 'BOOLEAN NOT NULL';
     final intType = 'INTEGER NOT NULL';
     final textType = 'TEXT NOT NULL';
-
     await db.execute('''CREATE TABLE $tableEvents(
-    ${EventFields.id}$idType,
-    ${EventFields.title}$textType,
-    ${EventFields.description}$textType,
-    ${EventFields.isAllDay}$boolType,
-    ${EventFields.backgroundColor}$textType,
-    ${EventFields.from}$intType,
-    ${EventFields.to}$textType,
-    
-    )''');
+    ${EventFields.id} $idType,
+    ${EventFields.title} $textType,
+    ${EventFields.description} $textType,
+    ${EventFields.isAllDay} $boolType,
+    ${EventFields.backgroundColor} $textType,
+    ${EventFields.from} $textType,
+    ${EventFields.to} $textType
+    )
+    ''');
+    print('dbcreated');
     // await db.execute('''CREATE TABLE $tableNotes(
     // ${NoteFields.id}$idType,
     // ${NoteFields.isImportant}$boolType,
@@ -67,7 +67,7 @@ class EventsDatabase {
     return event.copy(id: id);
   }
 
-  Future<Event> readNote(int id) async {
+  Future<Event> readEvent(int id) async {
     final db = await instance.database;
     final map = await db.query(tableEvents,
         columns: EventFields.values, where: '${EventFields.id}= ?',
@@ -80,7 +80,7 @@ class EventsDatabase {
       throw Exception('ID $id not found');
   }
 
-  Future<List<Event>> readAllNotes() async {
+  Future<List<Event>> readAllEvent() async {
     final db = await instance.database;
 
     final orderByStr = '${EventFields.from} ASC';
@@ -100,7 +100,8 @@ class EventsDatabase {
         where: '${EventFields.id} = ?', whereArgs: [event.id]);
   }
 
-  Future<int> delete(int id) async {
+  Future<int> delete(int? id) async {
+    if (id == null) throw ('id is null');
     final db = await instance.database;
     return await db
         .delete(tableEvents, where: '${EventFields.id} = ?', whereArgs: [id]);
