@@ -82,7 +82,6 @@ class EventsDatabase {
 
   Future<List<Event>> readAllEvent() async {
     final db = await instance.database;
-
     final orderByStr = '${EventFields.from} ASC';
 
     ///if we want to make our custom query via direct query input we can do this
@@ -90,7 +89,6 @@ class EventsDatabase {
     //     await db.rawQuery('SELECT FROM $tableNotes ORDER BY $orderByStr');
 
     final result = await db.query(tableEvents, orderBy: orderByStr);
-
     return result.map((e) => Event.fromJson(e)).toList();
   }
 

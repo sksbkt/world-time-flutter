@@ -4,11 +4,25 @@ import 'package:world_time/utilities/Event.dart';
 
 class EventDataSource extends CalendarDataSource {
   EventDataSource(Future<List<Event>> appointments) {
-    appointments.then((list) {
+    this.appointments = [
+      Appointment(
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        id: 1,
+        notes: 's',
+        color: Colors.white,
+      )
+    ];
+    appointments.then((List<Event> list) {
       this.appointments = list;
     });
+    //TODO: we need to implement a way so we can read data to our datasource
   }
-  Event getEvent(int index) => appointments![index] as Event;
+  Event getEvent(int index) {
+    print('trying to get event: ' + index.toString());
+    return appointments![index] as Event;
+  }
+
   @override
   DateTime getStartTime(int index) {
     // TODO: implement getStartTime

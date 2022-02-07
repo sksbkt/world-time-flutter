@@ -7,6 +7,7 @@ class EventProvider extends ChangeNotifier {
 
   // List<Event> get events => _events;
   Future<List<Event>> get events async {
+    print('reading events');
     return await EventsDatabase.instance.readAllEvent();
   }
 
@@ -16,21 +17,28 @@ class EventProvider extends ChangeNotifier {
   List<Event> get eventsOfSelectedDate => _events;
 
   void addEvent(Event event) {
-    _events.add(event);
-    notifyListeners();
+    EventsDatabase.instance.create(event).then((value) {
+      print(value.id);
+      notifyListeners();
+    });
+    // _events.add(event);
+    // notifyListeners();
   }
 
   void editEvent(Event newEvent, Event oldEvent) {
-    EventsDatabase.instance.update(newEvent);
+    EventsDatabase.instance.update(newEvent).then((value) {
+      print(value.toString());
+      notifyListeners();
+    });
 
     // final index = events.indexOf(oldEvent);
     // events[index] = newEvent;
-    notifyListeners();
   }
 
   void deleteEvent(Event event) {
-    EventsDatabase.instance.delete(event.id);
-    _events.remove(event);
-    notifyListeners();
+    EventsDatabase.instance.delete(event.id).then((value) {
+      print('removed ' + value.toString());
+      notifyListeners();
+    });
   }
 }
