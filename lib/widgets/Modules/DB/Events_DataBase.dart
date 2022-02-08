@@ -80,6 +80,19 @@ class EventsDatabase {
       throw Exception('ID $id not found');
   }
 
+  Future<Event> readEventWithData(DateTime time) async {
+    final db = await instance.database;
+    final map = await db.query(tableEvents,
+        columns: EventFields.values, where: '${EventFields.id}= ?',
+
+        ///we put values like this in whereArgs instead of the where so we prevent the SQL injections, for more values just put more '?' marks and add the paramater to whereArgs array
+        whereArgs: [time.toIso8601String()]);
+    if (map.isNotEmpty)
+      return Event.fromJson(map.first);
+    else
+      throw Exception('ID $time not found');
+  }
+
   Future<List<Event>> readAllEvent() async {
     final db = await instance.database;
     final orderByStr = '${EventFields.from} ASC';

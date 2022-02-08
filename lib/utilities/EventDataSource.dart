@@ -3,19 +3,20 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:world_time/utilities/Event.dart';
 
 class EventDataSource extends CalendarDataSource {
-  EventDataSource(Future<List<Event>> appointments) {
-    this.appointments = [
-      Appointment(
-        startTime: DateTime.now(),
-        endTime: DateTime.now(),
-        id: 1,
-        notes: 's',
-        color: Colors.white,
-      )
-    ];
-    appointments.then((List<Event> list) {
-      this.appointments = list;
-    });
+  EventDataSource(AsyncSnapshot snapshot) {
+    List<Appointment> collection = <Appointment>[];
+
+    if (snapshot.hasData) {
+      var eventsData = (snapshot.data as List<Event>).toList();
+      eventsData.forEach((event) {
+        collection.add(Appointment(
+            subject: event.title,
+            startTime: event.from,
+            endTime: event.to,
+            color: event.backgroundColor));
+      });
+    }
+    this.appointments = collection;
     //TODO: we need to implement a way so we can read data to our datasource
   }
   Event getEvent(int index) {
