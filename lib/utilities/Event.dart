@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 final String tableEvents = 'events';
@@ -83,4 +84,16 @@ class Event {
         from: DateTime.parse(json[EventFields.from] as String),
         to: DateTime.parse(json[EventFields.to] as String),
       );
+  static Event appointmentToEvent(Appointment input) {
+    print(input.toString());
+    return new Event(
+        title: input.subject,
+        description: input.notes ?? '',
+        from: input.startTime,
+        to: input.endTime);
+  }
+
+  static String formatDate(DateTime input) {
+    return DateFormat('MM/dd/yyyy - hh:mm').format(input);
+  }
 }

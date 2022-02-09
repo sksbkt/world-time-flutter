@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/pages/event_editing_page.dart';
 import 'package:world_time/services/EventProvider.dart';
@@ -33,7 +34,28 @@ class EventViewingPage extends StatelessWidget {
             Text(
               event.description,
               style: TextStyle(fontSize: 24),
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              Event.formatDate(event.from),
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              Event.formatDate(event.to),
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              event.isAllDay ? 'all day long' : 'not all day long',
+              style: TextStyle(fontSize: 24),
+            ),
           ],
         ));
   }

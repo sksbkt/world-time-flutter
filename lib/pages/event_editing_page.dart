@@ -23,6 +23,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
   late DateTime fromDate;
   late DateTime toDate;
 
+  final headerStyle = TextStyle(fontWeight: FontWeight.w700, fontSize: 20);
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +118,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 pickerDateTime(pickingFrom: false, pickDate: true),
             OntapEnding: () =>
                 pickerDateTime(pickingFrom: false, pickDate: false),
-          )
+          ),
+          colorPick(header: 'color')
           // buildTo()
         ],
       );
@@ -129,7 +132,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   }) =>
       buildHeader(
           header: header,
-          headerStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          headerStyle: headerStyle,
           child: Row(
             children: [
               Expanded(
@@ -250,4 +253,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
       Navigator.of(context).pop();
     }
   }
+
+  Widget colorPick({required String header}) =>
+      buildHeader(header: header, headerStyle: headerStyle, child: Container());
+  //TODO: color picker will be implemented in the future
 }

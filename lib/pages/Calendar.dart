@@ -29,7 +29,7 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    // final events = Provider.of<EventProvider>(context).events;
+    final events = Provider.of<EventProvider>(context).events;
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
@@ -54,7 +54,7 @@ class _CalendarState extends State<Calendar> {
             dataSource: EventDataSource(snapShot),
             cellBorderColor: Colors.transparent,
             onTap: (calendarTapDetails) {
-              print(calendarTapDetails.appointments);
+              // print(calendarTapDetails.appointments);
             },
             onLongPress: (details) {
               // final provider =

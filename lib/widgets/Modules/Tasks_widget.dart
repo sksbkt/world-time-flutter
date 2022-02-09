@@ -35,8 +35,8 @@ class _TasksWidgetState extends State<TasksWidget> {
         child: FutureBuilder(
             future: dbhelper.readAllEvent(),
             builder: (context, snapshot) {
-              print(widget.dateTime);
-              if (snapshot.hasData) print('snapshot has data');
+              // print(widget.dateTime);
+              // if (snapshot.hasData) print('snapshot has data');
               return SfCalendar(
                 view: CalendarView.timelineDay,
                 dataSource: EventDataSource(snapshot),
@@ -47,13 +47,14 @@ class _TasksWidgetState extends State<TasksWidget> {
                     BoxDecoration(color: Colors.white.withOpacity(0.2)),
                 onTap: (details) {
                   if (details.appointments == null) return;
+                  final first = details.appointments!.first;
 
-                  final event = details.appointments!.first;
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => EventViewingPage(event: event)));
+                      builder: (context) => EventViewingPage(
+                          event: Event.appointmentToEvent(first))));
                 },
                 onViewChanged: (detail) {
-                  print('changed:' + detail.toString());
+                  // print('changed:' + detail.toString());
                 },
               );
             }));
@@ -64,7 +65,7 @@ class _TasksWidgetState extends State<TasksWidget> {
     CalendarAppointmentDetails details,
   ) {
     final event = details.appointments.first;
-    print(details.appointments.first.toString());
+    // print(details.appointments.first.toString());
     return Container(
       decoration: BoxDecoration(
           color: event.color, borderRadius: BorderRadius.circular(12)),
