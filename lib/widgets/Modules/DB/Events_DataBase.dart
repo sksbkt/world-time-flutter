@@ -102,10 +102,15 @@ class EventsDatabase {
     //     await db.rawQuery('SELECT FROM $tableNotes ORDER BY $orderByStr');
 
     final result = await db.query(tableEvents, orderBy: orderByStr);
-    return result.map((e) => Event.fromJson(e)).toList();
+    var res = result.map((e) => Event.fromJson(e)).toList();
+    // res.forEach((element) {
+    //   print(element.id);
+    // });
+    return res;
   }
 
   Future<int> update(Event event) async {
+    print(event.toJson());
     final db = await instance.database;
     return await db.update(tableEvents, event.toJson(),
         where: '${EventFields.id} = ?', whereArgs: [event.id]);

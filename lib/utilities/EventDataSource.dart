@@ -10,6 +10,7 @@ class EventDataSource extends CalendarDataSource {
       var eventsData = (snapshot.data as List<Event>).toList();
       eventsData.forEach((event) {
         collection.add(Appointment(
+            id: event.id,
             subject: event.title,
             startTime: event.from,
             endTime: event.to,
@@ -20,7 +21,6 @@ class EventDataSource extends CalendarDataSource {
     //TODO: we need to implement a way so we can read data to our datasource
   }
   Event getEvent(int index) {
-    print('trying to get event: ' + index.toString());
     return appointments![index] as Event;
   }
 

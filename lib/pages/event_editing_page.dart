@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_html/shims/dart_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   final titleController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
+  late Color color;
 
   final headerStyle = TextStyle(fontWeight: FontWeight.w700, fontSize: 20);
 
@@ -36,6 +38,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       titleController.text = event.title;
       fromDate = event.from;
       toDate = event.to;
+      color = event.backgroundColor;
     }
   }
 
@@ -53,6 +56,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       appBar: AppBar(
         leading: CloseButton(),
         actions: builEditingActions(),
+        backgroundColor: color,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
@@ -235,17 +239,25 @@ class _EventEditingPageState extends State<EventEditingPage> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       final event = Event(
+          id: widget.event?.id,
           title: titleController.text,
           description: 's',
           from: fromDate,
           to: toDate,
-          isAllDay: false);
-      print(
-          event.title + ":" + event.description + ":" + event.from.toString());
+          isAllDay: false,
+          backgroundColor: color);
       final isEditing = widget.event != null;
 
       final provider = Provider.of<EventProvider>(context, listen: false);
       if (isEditing) {
+        print('ID' +
+            widget.event!.id.toString() +
+            event.title +
+            ' ' +
+            event.description +
+            event.id.toString() +
+            event.backgroundColor.toString() +
+            event.from.toIso8601String());
         provider.editEvent(event, widget.event!);
       } else {
         provider.addEvent(event);
@@ -254,7 +266,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
-  Widget colorPick({required String header}) =>
-      buildHeader(header: header, headerStyle: headerStyle, child: Container());
-  //TODO: color picker will be implemented in the future
+  Widget colorPick({required String header}) => buildHeader(
+      header: header,
+      headerStyle: headerStyle,
+      child: Container(
+          child: BlockPicker(
+              pickerColor: color,
+              availableColors: Event.colorList,
+              onColorChanged: (output) {
+                color = output;
+              })));
 }

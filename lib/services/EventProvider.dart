@@ -27,7 +27,6 @@ class EventProvider extends ChangeNotifier {
 
   void editEvent(Event newEvent, Event oldEvent) {
     EventsDatabase.instance.update(newEvent).then((value) {
-      print(value.toString());
       notifyListeners();
     });
 

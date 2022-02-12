@@ -35,8 +35,6 @@ class _TasksWidgetState extends State<TasksWidget> {
         child: FutureBuilder(
             future: dbhelper.readAllEvent(),
             builder: (context, snapshot) {
-              // print(widget.dateTime);
-              // if (snapshot.hasData) print('snapshot has data');
               return SfCalendar(
                 view: CalendarView.timelineDay,
                 dataSource: EventDataSource(snapshot),
@@ -53,9 +51,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                       builder: (context) => EventViewingPage(
                           event: Event.appointmentToEvent(first))));
                 },
-                onViewChanged: (detail) {
-                  // print('changed:' + detail.toString());
-                },
+                onViewChanged: (detail) {},
               );
             }));
   }
@@ -65,7 +61,6 @@ class _TasksWidgetState extends State<TasksWidget> {
     CalendarAppointmentDetails details,
   ) {
     final event = details.appointments.first;
-    // print(details.appointments.first.toString());
     return Container(
       decoration: BoxDecoration(
           color: event.color, borderRadius: BorderRadius.circular(12)),

@@ -32,6 +32,16 @@ class Event {
   final DateTime to;
   final Color backgroundColor;
   final bool isAllDay;
+  static List<Color> colorList = [
+    Colors.white,
+    Colors.black,
+    Colors.blue,
+    Colors.red,
+    Colors.yellow,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+  ];
 
   Event(
       {this.id,
@@ -85,12 +95,13 @@ class Event {
         to: DateTime.parse(json[EventFields.to] as String),
       );
   static Event appointmentToEvent(Appointment input) {
-    print(input.toString());
     return new Event(
+        id: int.parse(input.id.toString()),
         title: input.subject,
         description: input.notes ?? '',
         from: input.startTime,
-        to: input.endTime);
+        to: input.endTime,
+        backgroundColor: input.color);
   }
 
   static String formatDate(DateTime input) {
