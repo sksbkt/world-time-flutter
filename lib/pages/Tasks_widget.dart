@@ -20,6 +20,7 @@ class _TasksWidgetState extends State<TasksWidget> {
   final dbhelper = EventsDatabase.instance;
   @override
   Widget build(BuildContext context) {
+    final events = Provider.of<EventProvider>(context).events;
     // final provider = Provider.of<EventProvider>(context);
     // final selectedEvents = provider.eventsOfSelectedDate;
     // if (selectedEvents.isEmpty)
@@ -42,7 +43,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                 appointmentBuilder: appoinmentBuilder,
                 headerHeight: 0,
                 selectionDecoration:
-                    BoxDecoration(color: Colors.white.withOpacity(0.2)),
+                    BoxDecoration(color: Colors.white.withOpacity(0.1)),
                 onTap: (details) {
                   if (details.appointments == null) return;
                   final first = details.appointments!.first;
@@ -63,7 +64,7 @@ class _TasksWidgetState extends State<TasksWidget> {
     final event = details.appointments.first;
     return Container(
       decoration: BoxDecoration(
-          color: event.color, borderRadius: BorderRadius.circular(12)),
+          color: event.color, borderRadius: BorderRadius.circular(6)),
       width: details.bounds.width,
       height: details.bounds.height,
       child: Center(

@@ -88,7 +88,7 @@ class Event {
         description: json[EventFields.description] as String,
         isAllDay: json[EventFields.isAllDay] == 1,
         backgroundColor: Color(
-            int.parse(json[EventFields.backgroundColor] as String, radix: 16)),
+            int.tryParse(json[EventFields.backgroundColor] as String) ?? 0),
 
         /// since we save our Datetime as string on our database, we need to convert them back.
         from: DateTime.parse(json[EventFields.from] as String),

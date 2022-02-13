@@ -54,7 +54,7 @@ class timeApp extends StatelessWidget {
             '/time_deck': (context) => TimeDeck(),
             '/Settings': (context) => Settings(),
           },
-          theme: MyThemes.darkTheme,
+          theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
           themeMode: themeProvider.themeMode,
         );

@@ -33,6 +33,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
+      color = Colors.white;
     } else {
       final event = widget.event!;
       titleController.text = event.title;
@@ -274,6 +275,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
               pickerColor: color,
               availableColors: Event.colorList,
               onColorChanged: (output) {
+                print(output.value);
                 color = output;
               })));
 }
