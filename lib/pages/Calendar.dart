@@ -52,19 +52,24 @@ class _CalendarState extends State<Calendar> {
           // }
           return SfCalendarTheme(
             data: SfCalendarThemeData(
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor: Colors.white,
               viewHeaderDayTextStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-              viewHeaderBackgroundColor: Colors.grey.shade800,
+              viewHeaderBackgroundColor: Colors.grey.shade600,
               todayTextStyle: TextStyle(color: Colors.white),
-              todayHighlightColor: Colors.purple.shade400,
+              todayHighlightColor: Colors.red,
               activeDatesTextStyle: TextStyle(color: Colors.grey.shade900),
               leadingDatesTextStyle: TextStyle(color: Colors.grey),
+              leadingDatesBackgroundColor: Colors.grey.shade100,
               trailingDatesTextStyle: TextStyle(color: Colors.grey),
+              trailingDatesBackgroundColor: Colors.grey.shade100,
               headerTextStyle: TextStyle(
                   color: Colors.grey.shade800,
                   fontSize: 20,
                   fontWeight: FontWeight.w800),
+              todayBackgroundColor: Colors.grey.shade300,
+              activeDatesBackgroundColor: Colors.white,
+              selectionBorderColor: Colors.grey.shade600,
             ),
             child: SfCalendar(
               view: CalendarView.month,
@@ -91,7 +96,7 @@ class _CalendarState extends State<Calendar> {
       ),
       floatingActionButton: FloatingActionButton(
         hoverElevation: 0,
-        backgroundColor: Colors.blue.shade500,
+        backgroundColor: Colors.blue.shade600,
         child: Icon(
           Icons.add,
           color: Colors.white,

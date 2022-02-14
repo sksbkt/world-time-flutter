@@ -33,11 +33,11 @@ class Event {
   final Color backgroundColor;
   final bool isAllDay;
   static List<Color> colorList = [
-    Colors.white,
+    Colors.grey,
     Colors.black,
     Colors.blue,
     Colors.red,
-    Colors.yellow,
+    Colors.yellow.shade600,
     Colors.orange,
     Colors.purple,
     Colors.pink,

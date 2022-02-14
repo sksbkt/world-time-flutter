@@ -33,7 +33,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
-      color = Colors.white;
+      color = Colors.grey;
     } else {
       final event = widget.event!;
       titleController.text = event.title;
@@ -83,7 +83,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
     return [
       ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-              primary: Colors.transparent, shadowColor: Colors.transparent),
+              primary: Colors.transparent,
+              shadowColor: Colors.transparent,
+              elevation: 0),
           onPressed: saveForm,
           icon: Icon(FontAwesomeIcons.check),
           label: Text('Save'))
@@ -270,12 +272,42 @@ class _EventEditingPageState extends State<EventEditingPage> {
   Widget colorPick({required String header}) => buildHeader(
       header: header,
       headerStyle: headerStyle,
-      child: Container(
+      child: Row(children: [
+        Expanded(
           child: BlockPicker(
+              layoutBuilder: (context, colors, child) {
+                Orientation orientation = MediaQuery.of(context).orientation;
+                int _portraitCrossAxisCount = 8;
+                int _landscapeCrossAxisCount = 8;
+                return SizedBox(
+                  width: 300,
+                  height: orientation == Orientation.portrait ? 360 : 240,
+                  child: GridView.count(
+                    padding: EdgeInsets.all(20),
+                    crossAxisCount: orientation == Orientation.portrait
+                        ? _portraitCrossAxisCount
+                        : _landscapeCrossAxisCount,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: [for (Color color in colors) child(color)],
+                  ),
+                );
+              },
+              itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
+                    child: Container(
+                      width: 5,
+                      height: 5,
+                      color: color,
+                    ),
+                    onTap: changeColor,
+                  ),
               pickerColor: color,
               availableColors: Event.colorList,
               onColorChanged: (output) {
+                setState(() {});
                 print(output.value);
                 color = output;
-              })));
+              }),
+        )
+      ]));
 }
