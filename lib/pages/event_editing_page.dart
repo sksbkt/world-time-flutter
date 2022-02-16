@@ -21,6 +21,7 @@ class EventEditingPage extends StatefulWidget {
 class _EventEditingPageState extends State<EventEditingPage> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
   late Color color;
@@ -37,6 +38,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     } else {
       final event = widget.event!;
       titleController.text = event.title;
+      descriptionController.text = event.description;
       fromDate = event.from;
       toDate = event.to;
       color = event.backgroundColor;
@@ -47,6 +49,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   void dispose() {
     // TODO: implement dispose
     titleController.dispose();
+    descriptionController.dispose();
 
     super.dispose();
   }
@@ -54,13 +57,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: CloseButton(),
         actions: builEditingActions(),
         backgroundColor: color,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
+        reverse: true,
         child: Form(
           key: _formKey,
           child: Column(
@@ -72,6 +76,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 height: 20,
               ),
               buildDateTimePickers(),
+              colorPick(header: 'color'),
+              SizedBox(
+                height: 20,
+              ),
+              buildDescription(),
+              Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom)),
             ],
           ),
         ),
@@ -125,8 +137,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 pickerDateTime(pickingFrom: false, pickDate: true),
             OntapEnding: () =>
                 pickerDateTime(pickingFrom: false, pickDate: false),
-          ),
-          colorPick(header: 'color')
+          )
           // buildTo()
         ],
       );
@@ -244,7 +255,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       final event = Event(
           id: widget.event?.id,
           title: titleController.text,
-          description: 's',
+          description: descriptionController.text,
           from: fromDate,
           to: toDate,
           isAllDay: false,
@@ -273,41 +284,54 @@ class _EventEditingPageState extends State<EventEditingPage> {
       header: header,
       headerStyle: headerStyle,
       child: Row(children: [
-        Expanded(
-          child: BlockPicker(
-              layoutBuilder: (context, colors, child) {
-                Orientation orientation = MediaQuery.of(context).orientation;
-                int _portraitCrossAxisCount = 8;
-                int _landscapeCrossAxisCount = 8;
-                return SizedBox(
-                  width: 300,
-                  height: orientation == Orientation.portrait ? 360 : 240,
-                  child: GridView.count(
-                    padding: EdgeInsets.all(20),
-                    crossAxisCount: orientation == Orientation.portrait
-                        ? _portraitCrossAxisCount
-                        : _landscapeCrossAxisCount,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    children: [for (Color color in colors) child(color)],
+        BlockPicker(
+            layoutBuilder: (context, colors, child) {
+              Orientation orientation = MediaQuery.of(context).orientation;
+              int _portraitCrossAxisCount = 8;
+              int _landscapeCrossAxisCount = 8;
+              return SizedBox(
+                width: 300,
+                height: orientation == Orientation.portrait ? 50 : 40,
+                child: GridView.count(
+                  padding: EdgeInsets.all(20),
+                  crossAxisCount: orientation == Orientation.portrait
+                      ? _portraitCrossAxisCount
+                      : _landscapeCrossAxisCount,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  children: [for (Color color in colors) child(color)],
+                ),
+              );
+            },
+            itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
+                  child: Container(
+                    width: 5,
+                    height: 5,
+                    color: color,
                   ),
-                );
-              },
-              itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
-                    child: Container(
-                      width: 5,
-                      height: 5,
-                      color: color,
-                    ),
-                    onTap: changeColor,
-                  ),
-              pickerColor: color,
-              availableColors: Event.colorList,
-              onColorChanged: (output) {
-                setState(() {});
-                print(output.value);
-                color = output;
-              }),
-        )
+                  onTap: changeColor,
+                ),
+            pickerColor: color,
+            availableColors: Event.colorList,
+            onColorChanged: (output) {
+              setState(() {});
+              print(output.value);
+              color = output;
+            }),
       ]));
+
+  Widget buildDescription() => TextFormField(
+        maxLines: 4,
+        minLines: 3,
+        style: TextStyle(fontSize: 24),
+        decoration: InputDecoration(
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(3))),
+            hintText: 'Description'),
+        onFieldSubmitted: (_) => saveForm(),
+        controller: descriptionController,
+        // validator: (title) {
+        //   return title == null || title.isEmpty ? 'Title is empty' : null;
+        // },
+      );
 }

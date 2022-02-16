@@ -32,7 +32,11 @@ class _TasksWidgetState extends State<TasksWidget> {
 
     return SfCalendarTheme(
         data: SfCalendarThemeData(
-            timeTextStyle: TextStyle(fontSize: 16, color: Colors.blue)),
+          timeTextStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade500),
+        ),
         child: FutureBuilder(
             future: dbhelper.readAllEvent(),
             builder: (context, snapshot) {
@@ -47,7 +51,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                 onTap: (details) {
                   if (details.appointments == null) return;
                   final first = details.appointments!.first;
-
+                  print(first);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => EventViewingPage(
                           event: Event.appointmentToEvent(first))));
@@ -73,7 +77,9 @@ class _TasksWidgetState extends State<TasksWidget> {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+              color: Colors.grey.shade700,
+              fontSize: 16,
+              fontWeight: FontWeight.bold),
         ),
       ),
     );

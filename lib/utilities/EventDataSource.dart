@@ -12,6 +12,7 @@ class EventDataSource extends CalendarDataSource {
         collection.add(Appointment(
             id: event.id,
             subject: event.title,
+            notes: event.description,
             startTime: event.from,
             endTime: event.to,
             color: event.backgroundColor));
