@@ -5,9 +5,11 @@ class MyThemes {
       scaffoldBackgroundColor: Colors.grey.shade900,
       colorScheme: ColorScheme.dark());
   static final lightTheme = ThemeData(
-      scaffoldBackgroundColor: Colors.white,
-      colorScheme: ColorScheme.light(),
-      appBarTheme: AppBarTheme(backgroundColor: Colors.red.shade700));
+    scaffoldBackgroundColor: Colors.white,
+    // colorScheme: ColorScheme.light(),
+    colorSchemeSeed: Colors.redAccent,
+    // appBarTheme: AppBarTheme(backgroundColor: Colors.red.shade700)
+  );
 }
 
 class ThemeProvider extends ChangeNotifier {

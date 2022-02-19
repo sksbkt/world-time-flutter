@@ -72,14 +72,17 @@ class _TasksWidgetState extends State<TasksWidget> {
       width: details.bounds.width,
       height: details.bounds.height,
       child: Center(
-        child: Text(
-          event.subject,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: Colors.grey.shade700,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
+        child: Theme(
+          data: new ThemeData(colorSchemeSeed: event.color, useMaterial3: true),
+          child: Text(
+            event.subject,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                // color: Colors.grey.shade700,
+                fontSize: 16,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );

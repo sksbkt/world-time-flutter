@@ -77,14 +77,14 @@ Widget BuildSearchField(BuildContext context) {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             hintText: 'Search',
-            fillColor: Colors.white12,
+            // fillColor: Colors.white12,
             filled: true,
-            hintStyle: TextStyle(
-                color: Colors.white.withOpacity(0.3),
-                fontWeight: FontWeight.w300),
+            // hintStyle: TextStyle(
+            //     color: Colors.white.withOpacity(0.3),
+            //     fontWeight: FontWeight.w300),
             prefixIcon: Icon(
               Icons.search,
-              color: Colors.white.withOpacity(0.3),
+              // color: Colors.white.withOpacity(0.3),
             ),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
@@ -102,7 +102,9 @@ Widget BuildSearchField(BuildContext context) {
             backgroundImage: AssetImage('assets/${suggestion.flag}'),
           ),
           onTap: () async {
+            print('ssss');
             await location.getTime();
+            //TODO: there is an issue with showing the result on home page
             print(location.location);
             Navigator.pushReplacementNamed(context, '/home', arguments: {
               'location': location.location,
@@ -116,6 +118,7 @@ Widget BuildSearchField(BuildContext context) {
       },
       onSuggestionSelected: (WorldTime? suggestion) {
         final location = suggestion!;
+
         ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
           ..showSnackBar(SnackBar(
@@ -142,11 +145,11 @@ Widget BuildMenuItem(
     child: ListTile(
       leading: Icon(
         icon,
-        color: color,
+        // color: color,
       ),
       title: Text(
         text,
-        style: TextStyle(color: color),
+        // style: TextStyle(color: color),
       ),
       onTap: onClick,
     ),
