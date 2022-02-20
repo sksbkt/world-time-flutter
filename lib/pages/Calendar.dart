@@ -23,8 +23,6 @@ class _CalendarState extends State<Calendar> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
   }
 

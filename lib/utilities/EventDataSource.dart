@@ -8,7 +8,7 @@ class EventDataSource extends CalendarDataSource {
 
     if (snapshot.hasData) {
       var eventsData = (snapshot.data as List<Event>).toList();
-      eventsData.forEach((event) {
+      for (var event in eventsData) {
         collection.add(Appointment(
             id: event.id,
             subject: event.title,
@@ -16,9 +16,9 @@ class EventDataSource extends CalendarDataSource {
             startTime: event.from,
             endTime: event.to,
             color: event.backgroundColor));
-      });
+      }
     }
-    this.appointments = collection;
+    appointments = collection;
     //TODO: we need to implement a way so we can read data to our datasource
   }
   Event getEvent(int index) {
@@ -27,25 +27,21 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    // TODO: implement getStartTime
     return getEvent(index).from;
   }
 
   @override
   DateTime getEndTime(int index) {
-    // TODO: implement getEndTime
     return getEvent(index).to;
   }
 
   @override
   String getSubject(int index) {
-    // TODO: implement getSubject
     return getEvent(index).title;
   }
 
   @override
   Color getColor(int index) {
-    // TODO: implement getColor
     return getEvent(index).backgroundColor;
   }
 

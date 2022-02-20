@@ -59,6 +59,7 @@ class _HomeState extends State<Home> {
     final proTime = Provider.of<TimeUpdater>(context, listen: false);
     proTime.updateTime(offsethours, offsetMins);
     return Scaffold(
+      resizeToAvoidBottomInset: false,///avoids render overflow issues when keyboard opens up
       backgroundColor: bgColor,
       drawer: NavigationDrawerWidget(
         DrawerBg: bgColor,

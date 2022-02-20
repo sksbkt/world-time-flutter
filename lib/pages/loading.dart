@@ -12,25 +12,16 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+  //TODO: firebase will be implemented in navigation bar in a later update
+  // final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
   String time = 'loading';
   late String location;
   late String flag;
   late String url;
   late Map<String, dynamic> offset;
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   // TODO: implement didChangeAppLifecycleState
-  //   super.didChangeAppLifecycleState(state);
-  //   print('STATE IS' + state.toString());
-  //   //TODO:
-  // }
-
-  void setupWorldTime() async {
+  Future<void> setupWorldTime() async {
     await _loadPref();
-    // WorldTime instance =
-    //       WorldTime(location: 'Berlin', flag: 'Germany', url: 'Europe/Berlin');
 
     WorldTime instance = WorldTime(location: location, flag: flag, url: url);
 
@@ -51,18 +42,17 @@ class _LoadingState extends State<Loading> {
   void initState() {
     super.initState();
     setupWorldTime();
-    // WidgetsBinding.instance!.addObserver(this);
-    // print('init');
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _fbApp,
+        // future: _fbApp,
+        future: setupWorldTime(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Snapshot has error! ${snapshot.error.toString()}');
-            return Center(child: Text('Something went wrong'));
+            return Center(child: Text('can not connect to the servers.'));
           } else {
             return Scaffold(
                 backgroundColor: Colors.blue[800],
