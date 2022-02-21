@@ -24,7 +24,6 @@ class _LoadingState extends State<Loading> {
     await _loadPref();
 
     WorldTime instance = WorldTime(location: location, flag: flag, url: url);
-
     await instance.getTime();
 
     Navigator.pushReplacementNamed(context, '/home', arguments: {
@@ -41,7 +40,7 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
-    setupWorldTime();
+    // setupWorldTime();
   }
 
   @override

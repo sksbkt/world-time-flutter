@@ -40,10 +40,10 @@ class WorldTime {
     // DateTime diffrenece;
 
     try {
-      print('http://worldtimeapi.org/api/timezone/$url');
+      // print('http://worldtimeapi.org/api/timezone/$url');
       Response response =
           await get(Uri.parse('http://worldtimeapi.org/api/timezone/$url'));
-      print(response);
+
       Map data = jsonDecode(response.body);
       String dateTime = data['datetime'];
       String utc_offset = data['utc_offset'];

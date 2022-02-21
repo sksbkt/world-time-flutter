@@ -12,30 +12,38 @@ class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      child: Theme(
+        data: ThemeData(
+            colorSchemeSeed: Colors.red,
+            iconTheme: IconThemeData(color: Colors.yellow)),
         child: Container(
-            color: DrawerBg,
             child: ListView(
-              children: [
-                LoggedInDrawerWidget(),
-                // BuildSearchField(context),
-                TextFormField(),
-                SizedBox(
-                  height: 10,
-                ),
-                BuildMenuItem(
-                    text: 'Schedule',
-                    icon: FontAwesomeIcons.calendarAlt,
-                    onClick: () => selectedItem(context, 0)),
-                BuildMenuItem(
-                    text: 'Time deck',
-                    icon: FontAwesomeIcons.clock,
-                    onClick: () => selectedItem(context, 1)),
-                BuildMenuItem(
-                    text: 'Settings',
-                    icon: FontAwesomeIcons.cog,
-                    onClick: () => selectedItem(context, 2)),
-              ],
-            )));
+          children: [
+            LoggedInDrawerWidget(),
+            buildSearchField(context),
+            // TextFormField(),
+            const SizedBox(
+              height: 10,
+            ),
+            buildMenuItem(
+              text: 'Schedule',
+              icon: FontAwesomeIcons.calendarAlt,
+              onClick: () => selectedItem(context, 0),
+            ),
+            buildMenuItem(
+              text: 'Time deck',
+              icon: FontAwesomeIcons.clock,
+              onClick: () => selectedItem(context, 1),
+            ),
+            buildMenuItem(
+              text: 'Settings',
+              icon: FontAwesomeIcons.cog,
+              onClick: () => selectedItem(context, 2),
+            ),
+          ],
+        )),
+      ),
+    );
   }
 }
 
@@ -69,11 +77,11 @@ class NavigationDrawerWidget extends StatelessWidget {
 //   );
 // }
 
-Widget BuildSearchField(BuildContext context) {
+Widget buildSearchField(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
     child: TypeAheadField<WorldTime>(
-      suggestionsBoxDecoration: SuggestionsBoxDecoration(
+      suggestionsBoxDecoration: const SuggestionsBoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(4))),
       debounceDuration: Duration(microseconds: 500),
       // hideSuggestionsOnKeyboardHide: false,///could be problematic since we are using this feature in the navbar
@@ -86,7 +94,7 @@ Widget BuildSearchField(BuildContext context) {
             // hintStyle: TextStyle(
             //     color: Colors.white.withOpacity(0.3),
             //     fontWeight: FontWeight.w300),
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.search,
               // color: Colors.white.withOpacity(0.3),
             ),
@@ -131,7 +139,7 @@ Widget BuildSearchField(BuildContext context) {
       },
       noItemsFoundBuilder: (context) => Container(
         height: 100,
-        child: Center(
+        child: const Center(
           child: Text(
             'no location found:',
           ),
@@ -141,14 +149,13 @@ Widget BuildSearchField(BuildContext context) {
   );
 }
 
-Widget BuildMenuItem(
+Widget buildMenuItem(
     {required String text, required IconData icon, VoidCallback? onClick}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
     child: ListTile(
       leading: Icon(
         icon,
-        // color: color,
       ),
       title: Text(
         text,
