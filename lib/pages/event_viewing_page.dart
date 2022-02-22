@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:world_time/pages/event_editing_page.dart';
 import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/utilities/Event.dart';
+import 'package:world_time/widgets/Modules/UI/UiHelper.dart';
 
 class EventViewingPage extends StatelessWidget {
   final Event event;
@@ -22,38 +23,53 @@ class EventViewingPage extends StatelessWidget {
               event,
             )),
         body: ListView(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(23),
           children: [
-            Text(
-              event.title,
-              style: TextStyle(fontSize: 24),
+            HeaderBuilder(
+              header: 'Title',
+              child: Text(
+                event.title,
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            HeaderBuilder(
+              header: 'From:',
+              inline: true,
+              child: Text(
+                Event.formatDate(event.from),
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            HeaderBuilder(
+              header: 'To:',
+              inline: true,
+              child: Text(
+                Event.formatDate(event.to),
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            HeaderBuilder(
+              header: 'All day long:',
+              inline: true,
+              child: Text(
+                event.isAllDay ? 'Yes' : 'No',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             SizedBox(
               height: 10,
             ),
             Text(
               event.description,
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              Event.formatDate(event.from),
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              Event.formatDate(event.to),
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              event.isAllDay ? 'all day long' : 'not all day long',
               style: TextStyle(fontSize: 24),
             ),
           ],

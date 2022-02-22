@@ -9,6 +9,8 @@ import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/utilities/Utils.dart';
 import 'package:world_time/utilities/Event.dart';
 
+import '../widgets/Modules/UI/UiHelper.dart';
+
 class EventEditingPage extends StatefulWidget {
   final Event? event;
 
@@ -34,7 +36,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
-      color = Colors.grey;
+      color = Colors.redAccent;
     } else {
       final event = widget.event!;
       titleController.text = event.title;
@@ -65,26 +67,29 @@ class _EventEditingPageState extends State<EventEditingPage> {
       ),
       body: SingleChildScrollView(
         reverse: true,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildTitle(),
-              SizedBox(
-                height: 20,
-              ),
-              buildDateTimePickers(),
-              colorPick(header: 'color'),
-              SizedBox(
-                height: 20,
-              ),
-              buildDescription(),
-              Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom)),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildTitle(),
+                SizedBox(
+                  height: 20,
+                ),
+                buildDateTimePickers(),
+                colorPick(header: 'color'),
+                SizedBox(
+                  height: 20,
+                ),
+                buildDescription(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom)),
+              ],
+            ),
           ),
         ),
       ),
@@ -148,7 +153,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     required VoidCallback OnTapStarting,
     required VoidCallback OntapEnding,
   }) =>
-      buildHeader(
+      HeaderBuilder(
           header: header,
           headerStyle: headerStyle,
           child: Row(
@@ -185,24 +190,6 @@ class _EventEditingPageState extends State<EventEditingPage> {
         title: Text(text),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: onClicked,
-      );
-
-  Widget buildHeader(
-          {required String header,
-          required Widget child,
-          TextStyle? headerStyle}) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              header,
-              style: headerStyle,
-            ),
-          ),
-          child
-        ],
       );
 
   Future pickerDateTime(
@@ -280,45 +267,43 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
-  Widget colorPick({required String header}) => buildHeader(
+  Widget colorPick({required String header}) => HeaderBuilder(
       header: header,
       headerStyle: headerStyle,
-      child: Row(children: [
-        BlockPicker(
-            layoutBuilder: (context, colors, child) {
-              Orientation orientation = MediaQuery.of(context).orientation;
-              int _portraitCrossAxisCount = 8;
-              int _landscapeCrossAxisCount = 8;
-              return SizedBox(
-                width: 300,
-                height: orientation == Orientation.portrait ? 50 : 40,
-                child: GridView.count(
-                  padding: EdgeInsets.all(20),
-                  crossAxisCount: orientation == Orientation.portrait
-                      ? _portraitCrossAxisCount
-                      : _landscapeCrossAxisCount,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  children: [for (Color color in colors) child(color)],
+      child: BlockPicker(
+          layoutBuilder: (context, colors, child) {
+            Orientation orientation = MediaQuery.of(context).orientation;
+            int _portraitCrossAxisCount = 8;
+            int _landscapeCrossAxisCount = 8;
+            return SizedBox(
+              width: double.infinity,
+              height: orientation == Orientation.portrait ? 80 : 60,
+              child: GridView.count(
+                padding: EdgeInsets.all(20),
+                crossAxisCount: orientation == Orientation.portrait
+                    ? _portraitCrossAxisCount
+                    : _landscapeCrossAxisCount,
+                crossAxisSpacing: 3,
+                mainAxisSpacing: 3,
+                children: [for (Color color in colors) child(color)],
+              ),
+            );
+          },
+          itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
                 ),
-              );
-            },
-            itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
-                  child: Container(
-                    width: 5,
-                    height: 5,
-                    color: color,
-                  ),
-                  onTap: changeColor,
-                ),
-            pickerColor: color,
-            availableColors: Event.colorList,
-            onColorChanged: (output) {
-              setState(() {});
-              print(output.value);
-              color = output;
-            }),
-      ]));
+                onTap: changeColor,
+              ),
+          pickerColor: color,
+          availableColors: Event.colorList,
+          onColorChanged: (output) {
+            setState(() {});
+            print(output.value);
+            color = output;
+          }));
 
   Widget buildDescription() => TextFormField(
         maxLines: 4,

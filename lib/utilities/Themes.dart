@@ -5,11 +5,15 @@ class MyThemes {
       scaffoldBackgroundColor: Colors.grey.shade900,
       colorScheme: ColorScheme.dark());
   static final lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
-    // colorScheme: ColorScheme.light(),
-    colorSchemeSeed: Colors.redAccent,
-    // appBarTheme: AppBarTheme(backgroundColor: Colors.red.shade700)
-  );
+      scaffoldBackgroundColor: Colors.white,
+      // colorScheme: ColorScheme.light(),
+      colorScheme:
+          ColorScheme.fromSeed(seedColor: Colors.red, onError: Colors.red),
+      inputDecorationTheme: InputDecorationTheme(
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.purple)))
+      // appBarTheme: AppBarTheme(backgroundColor: Colors.red.shade700)
+      );
 }
 
 class ThemeProvider extends ChangeNotifier {
