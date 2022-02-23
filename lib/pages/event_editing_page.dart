@@ -26,9 +26,13 @@ class _EventEditingPageState extends State<EventEditingPage> {
   final descriptionController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
+  late
   late Color color;
 
-  final headerStyle = TextStyle(fontWeight: FontWeight.w700, fontSize: 20);
+  final headerStyle = TextStyle(
+      fontSize: 22, fontWeight: FontWeight.bold, color: Colors.grey.shade700);
+  final hintStyle = TextStyle(
+      fontSize: 22, fontWeight: FontWeight.w500, color: Colors.grey.shade600);
 
   @override
   void initState() {
@@ -61,34 +65,54 @@ class _EventEditingPageState extends State<EventEditingPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: CustomloseButton(),
         actions: builEditingActions(),
         backgroundColor: color,
       ),
       body: SingleChildScrollView(
         reverse: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                buildTitle(),
-                SizedBox(
-                  height: 20,
-                ),
-                buildDateTimePickers(),
-                colorPick(header: 'color'),
-                SizedBox(
-                  height: 20,
-                ),
-                buildDescription(),
-                Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom)),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildTitle(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildDateTimePickers(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //TODO: code must be hooked
+                  HeaderBuilder(
+                      header: 'All day long:',
+                      inline: true,
+                      child: Flexible(
+                          child: CheckboxListTile(
+                              value: true, onChanged: (_) {setState(() {
+
+                              });}))),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  colorPick(header: 'Color'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildDescription(),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom)),
+                ],
+              ),
             ),
           ),
         ),
@@ -105,7 +129,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
               elevation: 0),
           onPressed: saveForm,
           icon: Icon(FontAwesomeIcons.check),
-          label: Text('Save'))
+          label: Text(
+            'Save',
+            style: TextStyle(fontSize: 18),
+          ))
     ];
   }
 
@@ -113,7 +140,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
     return TextFormField(
       style: TextStyle(fontSize: 24),
       decoration: InputDecoration(
-          border: UnderlineInputBorder(), hintText: 'Add a title'),
+          border: UnderlineInputBorder(),
+          hintText: 'Add a title',
+          hintStyle: hintStyle),
       onFieldSubmitted: (_) => saveForm(),
       controller: titleController,
       validator: (title) {
@@ -136,7 +165,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 pickerDateTime(pickingFrom: true, pickDate: false),
           ),
           buildFrom(
-            header: 'to',
+            header: 'To',
             dateTime: toDate,
             OnTapStarting: () =>
                 pickerDateTime(pickingFrom: false, pickDate: true),
@@ -155,15 +184,15 @@ class _EventEditingPageState extends State<EventEditingPage> {
   }) =>
       HeaderBuilder(
           header: header,
-          headerStyle: headerStyle,
+          // headerStyle: headerStyle,
           child: Row(
             children: [
               Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: buildDropDownField(
                       text: Utils.toDate(dateTime), onClicked: OnTapStarting)),
               Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: buildDropDownField(
                       text: Utils.toTime(dateTime), onClicked: OntapEnding)),
             ],
@@ -269,7 +298,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   Widget colorPick({required String header}) => HeaderBuilder(
       header: header,
-      headerStyle: headerStyle,
+      // headerStyle: headerStyle,
       child: BlockPicker(
           layoutBuilder: (context, colors, child) {
             Orientation orientation = MediaQuery.of(context).orientation;
@@ -312,7 +341,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
         decoration: InputDecoration(
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(3))),
-            hintText: 'Description'),
+            hintText: 'Description',
+            hintStyle: hintStyle),
         onFieldSubmitted: (_) => saveForm(),
         controller: descriptionController,
         // validator: (title) {

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HeaderBuilder extends StatelessWidget {
   const HeaderBuilder({
@@ -20,7 +21,10 @@ class HeaderBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     late TextStyle? inPutStyle;
     if (headerStyle == null) {
-      inPutStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+      inPutStyle = TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey.shade700);
     } else {
       inPutStyle = headerStyle;
     }
@@ -41,17 +45,32 @@ class HeaderBuilder extends StatelessWidget {
       );
     }
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           header,
           style: inPutStyle,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: child,
-        )
+        child
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: child,
+        // )
       ],
+    );
+  }
+}
+
+class CustomloseButton extends StatelessWidget {
+  const CustomloseButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(FontAwesomeIcons.times),
+      onPressed: () {
+        Navigator.maybePop(context);
+      },
     );
   }
 }
