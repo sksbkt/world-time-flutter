@@ -110,7 +110,7 @@ class EventsDatabase {
   }
 
   Future<int> update(Event event) async {
-    print(event.toJson());
+    print('Json' + event.toJson().toString());
     final db = await instance.database;
     return await db.update(tableEvents, event.toJson(),
         where: '${EventFields.id} = ?', whereArgs: [event.id]);

@@ -28,7 +28,6 @@ class HeaderBuilder extends StatelessWidget {
     } else {
       inPutStyle = headerStyle;
     }
-    print(inline);
     if (inline == null || inline == false) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

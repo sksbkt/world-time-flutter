@@ -99,6 +99,7 @@ class Event {
         id: int.parse(input.id.toString()),
         title: input.subject,
         description: input.notes ?? '',
+        isAllDay: input.isAllDay,
         from: input.startTime,
         to: input.endTime,
         backgroundColor: input.color);

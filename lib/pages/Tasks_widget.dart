@@ -51,7 +51,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                 onTap: (details) {
                   if (details.appointments == null) return;
                   final first = details.appointments!.first;
-                  print(first);
+                  print('appointemnt : ' + first.toString());
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => EventViewingPage(
                           event: Event.appointmentToEvent(first))));
