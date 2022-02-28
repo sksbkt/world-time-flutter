@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -19,4 +21,19 @@ class Utils {
 
   static DateTime removeTime(DateTime dateTime) =>
       DateTime(dateTime.year, dateTime.month, dateTime.day);
+}
+
+class AlignHelper {
+  late double x;
+  late double y;
+  late BuildContext context;
+  AlignHelper(TapUpDetails details) {}
+
+  double toAlignValue(double inputTap, double screenSize) {
+    double mid = screenSize / 2;
+    double tapPos = inputTap / screenSize;
+    print(tapPos.toString());
+
+    return inputTap > mid ? tapPos : tapPos - 1;
+  }
 }

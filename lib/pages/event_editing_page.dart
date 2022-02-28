@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_html/shims/dart_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,10 +25,13 @@ class _EventEditingPageState extends State<EventEditingPage> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final scrollController = ScrollController();
   late DateTime fromDate;
   late DateTime toDate;
-  late
+  late bool allDayLong;
   late Color color;
+
+  bool reversed = true;
 
   final headerStyle = TextStyle(
       fontSize: 22, fontWeight: FontWeight.bold, color: Colors.grey.shade700);
@@ -36,11 +40,11 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   @override
   void initState() {
-    super.initState();
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
       color = Colors.redAccent;
+      allDayLong = false;
     } else {
       final event = widget.event!;
       titleController.text = event.title;
@@ -48,7 +52,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
       fromDate = event.from;
       toDate = event.to;
       color = event.backgroundColor;
+      allDayLong = event.isAllDay;
     }
+    print('init state: ' + allDayLong.toString());
+    super.initState();
   }
 
   @override
@@ -69,55 +76,81 @@ class _EventEditingPageState extends State<EventEditingPage> {
         actions: builEditingActions(),
         backgroundColor: color,
       ),
-      body: SingleChildScrollView(
-        reverse: true,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 10,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            reverse: reversed,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                buildTitle(),
+                SizedBox(
+                  height: 10,
+                ),
+                buildDateTimePickers(),
+                SizedBox(
+                  height: 10,
+                ),
+                //TODO: code must be hooked
+                buildAllDayLong(),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTapUp: (TapUpDetails detail) {
+                    double width = MediaQuery.of(context).size.width;
+                    double height = MediaQuery.of(context).size.height;
+                    double x = toAlignValue(detail.globalPosition.dx, width);
+                    double y = toAlignValue(detail.globalPosition.dy, height);
+                    showDialog(
+                        context: context,
+                        builder: (context) => Align(
+                            alignment: Alignment(0, y),
+                            child: Material(
+                                child: colorPick(header: 'pick Color'))));
+                  },
+                  onTap: () {},
+                  child: Container(
+                    color: color,
+                    height: 40,
+                    width: 40,
                   ),
-                  buildTitle(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  buildDateTimePickers(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  //TODO: code must be hooked
-                  HeaderBuilder(
-                      header: 'All day long:',
-                      inline: true,
-                      child: Flexible(
-                          child: CheckboxListTile(
-                              value: true, onChanged: (_) {setState(() {
-
-                              });}))),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  colorPick(header: 'Color'),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  buildDescription(),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom)),
-                ],
-              ),
+                ),
+                colorPick(header: 'Color'),
+                SizedBox(
+                  height: 10,
+                ),
+                buildDescription(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom)),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget buildAllDayLong() {
+    return HeaderBuilder(
+        header: 'All day long:',
+        inline: true,
+        child: Flexible(
+            child: CheckboxListTile(
+                value: allDayLong,
+                onChanged: (value) {
+                  allDayLong = value ?? false;
+                  print(allDayLong);
+                  setState(() {});
+                })));
   }
 
   List<Widget> builEditingActions() {
@@ -138,6 +171,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   Widget buildTitle() {
     return TextFormField(
+      onTap: () {
+        reversed = false;
+        setState(() {});
+        scrollController.animateTo(0,
+            duration: Duration(seconds: 1), curve: Curves.easeOut);
+      },
       style: TextStyle(fontSize: 24),
       decoration: InputDecoration(
           border: UnderlineInputBorder(),
@@ -274,13 +313,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
           description: descriptionController.text,
           from: fromDate,
           to: toDate,
-          isAllDay: false,
+          isAllDay: allDayLong,
           backgroundColor: color);
       final isEditing = widget.event != null;
 
       final provider = Provider.of<EventProvider>(context, listen: false);
       if (isEditing) {
-        print('ID' +
+        print('ID ' +
+            allDayLong.toString() +
             widget.event!.id.toString() +
             event.title +
             ' ' +
@@ -296,45 +336,47 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
-  Widget colorPick({required String header}) => HeaderBuilder(
-      header: header,
-      // headerStyle: headerStyle,
-      child: BlockPicker(
-          layoutBuilder: (context, colors, child) {
-            Orientation orientation = MediaQuery.of(context).orientation;
-            int _portraitCrossAxisCount = 8;
-            int _landscapeCrossAxisCount = 8;
-            return SizedBox(
-              width: double.infinity,
-              height: orientation == Orientation.portrait ? 80 : 60,
-              child: GridView.count(
-                padding: EdgeInsets.all(20),
-                crossAxisCount: orientation == Orientation.portrait
-                    ? _portraitCrossAxisCount
-                    : _landscapeCrossAxisCount,
-                crossAxisSpacing: 3,
-                mainAxisSpacing: 3,
-                children: [for (Color color in colors) child(color)],
-              ),
-            );
-          },
-          itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.all(Radius.circular(4))),
-                ),
-                onTap: changeColor,
-              ),
-          pickerColor: color,
-          availableColors: Event.colorList,
-          onColorChanged: (output) {
-            setState(() {});
-            print(output.value);
-            color = output;
-          }));
+  Widget colorPick({required String header}) => BlockPicker(
+      layoutBuilder: (context, colors, child) {
+        Orientation orientation = MediaQuery.of(context).orientation;
+        int _portraitCrossAxisCount = 8;
+        int _landscapeCrossAxisCount = 8;
+        return SizedBox(
+          width: double.infinity,
+          height: orientation == Orientation.portrait ? 80 : 60,
+          child: GridView.count(
+            padding: EdgeInsets.all(20),
+            crossAxisCount: orientation == Orientation.portrait
+                ? _portraitCrossAxisCount
+                : _landscapeCrossAxisCount,
+            crossAxisSpacing: 3,
+            mainAxisSpacing: 3,
+            children: [for (Color color in colors) child(color)],
+          ),
+        );
+      },
+      itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.all(Radius.circular(4))),
+            ),
+            onTap: changeColor,
+          ),
+      pickerColor: color,
+      availableColors: Event.colorList,
+      onColorChanged: (output) {
+        setState(() {});
+        color = output;
+      });
 
   Widget buildDescription() => TextFormField(
+        onTap: () {
+          reversed = true;
+          setState(() {});
+          scrollController.animateTo(0,
+              duration: Duration(seconds: 1), curve: Curves.easeOut);
+        },
         maxLines: 4,
         minLines: 3,
         style: TextStyle(fontSize: 24),
@@ -349,4 +391,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
         //   return title == null || title.isEmpty ? 'Title is empty' : null;
         // },
       );
+}
+
+double toAlignValue(double inputTap, double screenSize) {
+  double mid = screenSize / 2;
+  double tapPos = inputTap / screenSize;
+  print(tapPos.toString());
+
+  return inputTap > mid ? tapPos : tapPos - 1;
 }

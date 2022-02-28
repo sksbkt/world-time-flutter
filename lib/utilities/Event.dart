@@ -51,6 +51,7 @@ class Event {
       required this.to,
       this.backgroundColor = Colors.lightGreen,
       this.isAllDay = false});
+
   Map<String, Object?> toJson() => {
         EventFields.id: id,
         EventFields.title: title,
