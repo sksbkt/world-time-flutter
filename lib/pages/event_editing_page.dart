@@ -113,20 +113,22 @@ class _EventEditingPageState extends State<EventEditingPage> {
                         context: context,
                         builder: (context) => Align(
                             alignment: Alignment(0, y),
-                            child: Material(
-                                child: colorPick(header: 'pick Color'))));
+                            child: Material(child: colorPick())));
                   },
                   onTap: () {},
                   child: Container(
-                    color: color,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: color),
+                    // color: color,
                     height: 40,
                     width: 40,
                   ),
                 ),
-                colorPick(header: 'Color'),
-                SizedBox(
-                  height: 10,
-                ),
+                // colorPick(),
+                // SizedBox(
+                //   height: 10,
+                // ),
                 buildDescription(),
                 Padding(
                     padding: EdgeInsets.only(
@@ -336,27 +338,38 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
-  Widget colorPick({required String header}) => BlockPicker(
+  Widget colorPick() => BlockPicker(
       layoutBuilder: (context, colors, child) {
-        Orientation orientation = MediaQuery.of(context).orientation;
-        int _portraitCrossAxisCount = 8;
-        int _landscapeCrossAxisCount = 8;
-        return SizedBox(
-          width: double.infinity,
-          height: orientation == Orientation.portrait ? 80 : 60,
-          child: GridView.count(
-            padding: EdgeInsets.all(20),
-            crossAxisCount: orientation == Orientation.portrait
-                ? _portraitCrossAxisCount
-                : _landscapeCrossAxisCount,
-            crossAxisSpacing: 3,
-            mainAxisSpacing: 3,
-            children: [for (Color color in colors) child(color)],
+        // Orientation orientation = MediaQuery.of(context).orientation;
+        // int _portraitCrossAxisCount = 4;
+        // int _landscapeCrossAxisCount = 4;
+        return Container(
+          width: 300,
+          height: 200,
+          // orientation == Orientation.portrait ? 100 : 60,
+          decoration:
+              BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5))),
+          child: SizedBox(
+            width: 200,
+            child: GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.all(20),
+              crossAxisCount: 4,
+              // orientation == Orientation.portrait
+              //     ? _portraitCrossAxisCount
+              //     : _landscapeCrossAxisCount,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children: [for (Color color in colors) child(color)],
+            ),
           ),
         );
       },
       itemBuilder: (color, isCurrentColor, changeColor) => InkWell(
             child: Container(
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.all(Radius.circular(4))),
