@@ -103,33 +103,16 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTapUp: (TapUpDetails detail) {
-                    double width = MediaQuery.of(context).size.width;
-                    double height = MediaQuery.of(context).size.height;
-                    double x = toAlignValue(detail.globalPosition.dx, width);
-                    double y = toAlignValue(detail.globalPosition.dy, height);
-                    showDialog(
-                        context: context,
-                        builder: (context) => Align(
-                            alignment: Alignment(0, y),
-                            child: Material(child: colorPick())));
-                  },
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: color),
-                    // color: color,
-                    height: 40,
-                    width: 40,
-                  ),
-                ),
+                buildColorPickerDialog(context),
                 // colorPick(),
                 // SizedBox(
                 //   height: 10,
                 // ),
+                SizedBox(
+                  height: 10,
+                ),
                 buildDescription(),
+
                 Padding(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom)),
@@ -147,6 +130,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
         inline: true,
         child: Flexible(
             child: CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                title: null,
                 value: allDayLong,
                 onChanged: (value) {
                   allDayLong = value ?? false;
@@ -338,6 +323,40 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
+  Widget buildColorPickerDialog(BuildContext context) {
+    return HeaderBuilder(
+      header: 'Color:',
+      inline: true,
+      child: Flexible(
+        child: GestureDetector(
+          onTapUp: (TapUpDetails detail) {
+            double width = MediaQuery.of(context).size.width;
+            double height = MediaQuery.of(context).size.height;
+            double x = toAlignValue(detail.globalPosition.dx, width);
+            double y = toAlignValue(detail.globalPosition.dy, height);
+            showDialog(
+                context: context,
+                builder: (context) => Align(
+                    alignment: Alignment(0, y),
+                    child: AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        content: Material(child: colorPick()))));
+          },
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: color),
+            // color: color,
+            height: 40,
+            width: 40,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget colorPick() => BlockPicker(
       layoutBuilder: (context, colors, child) {
         // Orientation orientation = MediaQuery.of(context).orientation;
@@ -345,24 +364,20 @@ class _EventEditingPageState extends State<EventEditingPage> {
         // int _landscapeCrossAxisCount = 4;
         return Container(
           width: 300,
-          height: 200,
           // orientation == Orientation.portrait ? 100 : 60,
           decoration:
               BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5))),
-          child: SizedBox(
-            width: 200,
-            child: GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(20),
-              crossAxisCount: 4,
-              // orientation == Orientation.portrait
-              //     ? _portraitCrossAxisCount
-              //     : _landscapeCrossAxisCount,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: [for (Color color in colors) child(color)],
-            ),
+          child: GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            // padding: EdgeInsets.all(10),
+            crossAxisCount: 4,
+            // orientation == Orientation.portrait
+            //     ? _portraitCrossAxisCount
+            //     : _landscapeCrossAxisCount,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            children: [for (Color color in colors) child(color)],
           ),
         );
       },
@@ -381,6 +396,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       onColorChanged: (output) {
         setState(() {});
         color = output;
+        Navigator.pop(context);
       });
 
   Widget buildDescription() => TextFormField(

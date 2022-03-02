@@ -44,7 +44,7 @@ class HeaderBuilder extends StatelessWidget {
       );
     }
     return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           header,
