@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/shims/dart_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/pages/event_editing_page.dart';
@@ -88,11 +89,39 @@ class EventViewingPage extends StatelessWidget {
           icon: Icon(Icons.edit)),
       IconButton(
           onPressed: () {
-            final provider = Provider.of<EventProvider>(context, listen: false);
-            provider.deleteEvent(event);
-            Navigator.of(context).pop();
+            showAlertDialog(
+                context: context,
+                onAccept: () {
+                  final provider =
+                      Provider.of<EventProvider>(context, listen: false);
+                  provider.deleteEvent(event);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                });
           },
           icon: Icon(Icons.delete)),
     ];
+  }
+
+  showAlertDialog({
+    required BuildContext context,
+    required VoidCallback onAccept,
+  }) {
+    Widget cancelButton = IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.close_outlined));
+    Widget acceptButton =
+        IconButton(onPressed: onAccept, icon: Icon(Icons.check));
+
+    AlertDialog alert = AlertDialog(
+      content: Text('Are you sure you want to delete this appointment?'),
+      actions: [cancelButton, acceptButton],
+    );
+    showDialog(
+        context: context,
+        builder: (context) {
+          return alert;
+        });
   }
 }
