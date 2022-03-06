@@ -6,6 +6,7 @@ import 'package:world_time/pages/event_editing_page.dart';
 import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/utilities/Event.dart';
 import 'package:world_time/utilities/EventDataSource.dart';
+import 'package:world_time/widgets/BottomNavigationBar.dart';
 import 'package:world_time/widgets/Modules/DB/Events_DataBase.dart';
 import 'package:world_time/pages/Tasks_widget.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
@@ -26,6 +27,7 @@ class _CalendarState extends State<Calendar> {
     super.initState();
   }
 
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<EventProvider>(context).events;
@@ -101,6 +103,10 @@ class _CalendarState extends State<Calendar> {
         ),
         onPressed: () => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => EventEditingPage())),
+      ),
+      bottomNavigationBar: ShowBottomNavBar(
+        context: context,
+        // onTap: _onItemTapped,
       ),
     );
   }

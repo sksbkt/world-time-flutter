@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
+import 'package:world_time/widgets/BottomNavigationBar.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
 
 class Home extends StatefulWidget {
@@ -45,11 +46,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print(data);
     data = data.isNotEmpty
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
+    print('so far so good');
     offsethours = data['offsetHours'];
     offsetMins = data['offsetMins'];
+
     // offsetMins = int.parse(data['offsetMins']);
     String bgImage = data['isDayTime'] ? 'assets/day.png' : 'assets/night.png';
     Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[800];
@@ -150,6 +154,7 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
+        bottomNavigationBar: ShowBottomNavBar(context: context),
       ),
     );
   }
