@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:world_time/services/world_time.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:world_time/utilities/objects/CityObjects.dart';
+import 'package:world_time/utilities/objects/TimeObject.dart';
+import 'package:world_time/utilities/objects/TimeOffset.dart';
 import 'package:world_time/widgets/Modules/SearchFieldModule.dart';
 import 'package:world_time/widgets/Modules/SearchResultModule.dart';
 
@@ -14,41 +15,27 @@ class ChooseLocation extends StatefulWidget {
 
 class _ChooseLocationState extends State<ChooseLocation>
     with WidgetsBindingObserver {
-  List<WorldTime> locations = WorldTime.locations;
-  // [
-  //   WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png'),
-  //   WorldTime(url: 'Europe/Berlin', location: 'Athens', flag: 'greece.png'),
-  //   WorldTime(url: 'Africa/Cairo', location: 'Cairo', flag: 'egypt.png'),
-  //   WorldTime(url: 'Africa/Nairobi', location: 'Nairobi', flag: 'kenya.png'),
-  //   WorldTime(url: 'America/Chicago', location: 'Chicago', flag: 'usa.png'),
-  //   WorldTime(url: 'America/New_York', location: 'New York', flag: 'usa.png'),
-  //   WorldTime(url: 'Asia/Seoul', location: 'Seoul', flag: 'south_korea.png'),
-  //   WorldTime(url: 'Asia/Jakarta', location: 'Jakarta', flag: 'indonesia.png'),
-  // ];
+  List<CityObject> locations = CityObject.locations;
+
   String query = '';
   @override
   void dispose() {
     super.dispose();
   }
 
-  // Future<void> _savePref(index) async {
-  //   await SharedPreferences.getInstance().then((prefs) => {
-  //         prefs.setString('location', locations[index].location),
-  //         prefs.setString('flag', locations[index].flag),
-  //         prefs.setString('url', locations[index].url),
-  //       });
-  // }
-
   void updateTime(index) async {
-    WorldTime instance = locations[index];
-    await instance.getTime();
+    CityObject cityObject = locations[index];
+    WorldTime().location = cityObject.location;
+    WorldTime().getTime();
+
+    await WorldTime().getTime();
     Navigator.pop(context, {
-      'location': instance.location,
-      'flag': instance.flag,
-      'time': instance.time,
-      'offsetHours': instance.offset['offsetHours'],
-      'offsetMins': instance.offset['offsetMins'],
-      'isDayTime': instance.isDayTime
+      // 'location': instance.location,
+      // 'flag': instance.flag,
+      // 'time': instance.time,
+      // 'offsetHours': TimeOffset(rawOffset: instance.offset).offsetHours,
+      // 'offsetMins': TimeOffset(rawOffset: instance.offset).offsetMins,
+      // 'isDayTime': instance.isDayTime
     });
   }
 
@@ -81,6 +68,8 @@ class _ChooseLocationState extends State<ChooseLocation>
                       ),
                       onTap: () {
                         updateTime(index);
+                        print(TimeObject(location: locations[index].location)
+                            .flag);
                         // _savePref(index);
                       },
                       title: searchResult(query, locations[index].location),
@@ -98,7 +87,7 @@ class _ChooseLocationState extends State<ChooseLocation>
   Widget buildSearch() => SearchWidget(
       Text: query, onChanged: searchLocation, hintText: 'hintText');
   void searchLocation(String query) {
-    locations = WorldTime.locations;
+    locations = CityObject.locations;
     final searchLoc = locations.where((loc) {
       return loc.location.toLowerCase().contains(query.toLowerCase());
     }).toList();

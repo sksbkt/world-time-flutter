@@ -6,11 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
+import 'package:world_time/services/world_time.dart';
+import 'package:world_time/utilities/objects/TimeObject.dart';
+import 'package:world_time/utilities/objects/TimeOffset.dart';
 import 'package:world_time/widgets/BottomNavigationBar.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final TimeObject? timeobject;
+  const Home({Key? key, this.timeobject}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -24,6 +28,7 @@ class _HomeState extends State<Home> {
   // late Timer _timer;
   late int offsethours;
   late int offsetMins;
+  late TimeObject timeObject;
   @override
   void initState() {
     // TODO: implement initState
@@ -46,17 +51,23 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
     data = data.isNotEmpty
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
-    print('so far so good');
-    offsethours = data['offsetHours'];
-    offsetMins = data['offsetMins'];
+
+    timeObject = data['timeObject'];
+
+    // offsethours = data['offsetHours'];
+    // offsetMins = data['offsetMins'];
+
+    offsethours = TimeOffset(rawOffset: WorldTime().utc_offset).offsetHours;
+    offsetMins = TimeOffset(rawOffset: WorldTime().utc_offset).offsetMins;
+    // offsetMins = timeObject.offsetMins;
 
     // offsetMins = int.parse(data['offsetMins']);
-    String bgImage = data['isDayTime'] ? 'assets/day.png' : 'assets/night.png';
-    Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[800];
+    String bgImage =
+        WorldTime().isDayTime ? 'assets/day.png' : 'assets/night.png';
+    Color? bgColor = WorldTime().isDayTime ? Colors.blue : Colors.indigo[800];
     // if (!onTick) time = DateTime.parse(data['time']);
     // onTick = true;
 
@@ -90,14 +101,14 @@ class _HomeState extends State<Home> {
                             await Navigator.pushNamed(context, '/location');
                         setState(() {
                           // onTick = false;
-                          data = {
-                            'time': result['time'],
-                            'location': result['location'],
-                            'flag': result['flag'],
-                            'offsetHours': result['offsetHours'],
-                            'offsetMins': result['offsetMins'],
-                            'isDayTime': result['isDayTime'],
-                          };
+                          // data = {
+                          //   'time': result['time'],
+                          //   'location': result['location'],
+                          //   'flag': result['flag'],
+                          //   'offsetHours': result['offsetHours'],
+                          //   'offsetMins': result['offsetMins'],
+                          //   'isDayTime': result['isDayTime'],
+                          // };
                         });
                       },
                       icon: Icon(
@@ -115,7 +126,7 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        data['location'],
+                        WorldTime().location,
                         style: TextStyle(
                             fontSize: 28,
                             letterSpacing: 2,

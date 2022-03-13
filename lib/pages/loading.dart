@@ -3,6 +3,8 @@ import 'package:world_time/services/world_time.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:world_time/utilities/Event.dart';
+import 'package:world_time/utilities/objects/TimeObject.dart';
 
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
@@ -23,18 +25,26 @@ class _LoadingState extends State<Loading> {
   Future<void> setupWorldTime() async {
     await _loadPref();
 
-    WorldTime instance = WorldTime(location: location, flag: flag, url: url);
-    await instance.getTime();
+    // print(offset);
+    // WorldTime instance = WorldTime(location: location, flag: flag, url: url);
+
+    WorldTime().location = location;
+    await WorldTime().getTime();
+
+    TimeObject instance = TimeObject(location: location);
+
+    // await WorldTime.instance(location);
 
     Navigator.pushReplacementNamed(context, '/home', arguments: {
-      'location': instance.location,
-      'flag': instance.flag,
-      'time': instance.time,
-      'isDayTime': instance.isDayTime,
-      'offsetHours': instance.offset['offsetHours'],
-      'offsetMins': instance.offset['offsetMins'],
+      'timeObject': instance
+      // 'location': instance.location,
+      // 'flag': instance.flag,
+      // 'time': instance.time,
+      // 'isDayTime': instance.isDayTime,
+      // 'offsetHours': instance.offset['offsetHours'],
+      // 'offsetMins': instance.offset['offsetMins'],
     });
-    WorldTime.getLocations();
+    // WorldTime.getLocations();
   }
 
   @override

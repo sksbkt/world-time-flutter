@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:world_time/services/world_time.dart';
+import 'package:world_time/utilities/objects/CityObjects.dart';
 import 'package:world_time/widgets/LoggedInDrawer.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -47,40 +48,10 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 }
 
-///deprecated
-// Widget oldBuildSearchField() {
-//   final Color = Colors.white;
-//   return Padding(
-//     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-//     child: TextField(
-//       style: TextStyle(
-//           color: Colors.white, fontWeight: FontWeight.w300, fontSize: 18),
-//       decoration: InputDecoration(
-//           contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-//           hintText: 'Search',
-//           fillColor: Colors.white12,
-//           filled: true,
-//           hintStyle: TextStyle(
-//               color: Colors.white.withOpacity(0.3),
-//               fontWeight: FontWeight.w300),
-//           prefixIcon: Icon(
-//             Icons.search,
-//             color: Colors.white.withOpacity(0.3),
-//           ),
-//           enabledBorder: OutlineInputBorder(
-//               borderRadius: BorderRadius.circular(5),
-//               borderSide: BorderSide(color: Colors.white)),
-//           focusedBorder: OutlineInputBorder(
-//               borderRadius: BorderRadius.circular(5),
-//               borderSide: BorderSide(color: Colors.white))),
-//     ),
-//   );
-// }
-
 Widget buildSearchField(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-    child: TypeAheadField<WorldTime>(
+    child: TypeAheadField<CityObject>(
       suggestionsBoxDecoration: const SuggestionsBoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(4))),
       debounceDuration: Duration(microseconds: 500),
@@ -89,14 +60,9 @@ Widget buildSearchField(BuildContext context) {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             hintText: 'Search',
-            // fillColor: Colors.white12,
             filled: true,
-            // hintStyle: TextStyle(
-            //     color: Colors.white.withOpacity(0.3),
-            //     fontWeight: FontWeight.w300),
             prefixIcon: const Icon(
               Icons.search,
-              // color: Colors.white.withOpacity(0.3),
             ),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
@@ -105,8 +71,8 @@ Widget buildSearchField(BuildContext context) {
                 borderRadius: BorderRadius.circular(5),
                 borderSide: BorderSide(color: Colors.white))),
       ),
-      suggestionsCallback: WorldTime.Suggestion,
-      itemBuilder: (context, WorldTime? suggestion) {
+      suggestionsCallback: CityObject.Suggestion,
+      itemBuilder: (context, CityObject? suggestion) {
         final location = suggestion!;
         return ListTile(
           leading: CircleAvatar(
@@ -115,20 +81,22 @@ Widget buildSearchField(BuildContext context) {
           ),
           onTap: () async {
             print('ssss');
-            await location.getTime();
+            WorldTime().location = location.location;
+            await WorldTime().getTime();
             //TODO: there is an issue with showing the result on home page
             print(location.location);
             Navigator.pushReplacementNamed(context, '/home', arguments: {
-              'location': location.location,
-              'flag': location.flag,
-              'time': location.time,
-              'isDayTime': location.isDayTime
+              'timeObject': suggestion
+              // 'location': location.location,
+              // 'flag': location.flag,
+              // 'time': location.time,
+              // 'isDayTime': location.isDayTime
             });
           },
           title: Text(location.location),
         );
       },
-      onSuggestionSelected: (WorldTime? suggestion) {
+      onSuggestionSelected: (CityObject? suggestion) {
         final location = suggestion!;
 
         ScaffoldMessenger.of(context)
