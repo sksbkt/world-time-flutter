@@ -21,14 +21,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Map data = {};
+  // Map data = {};
   late DateTime time;
   // late bool onTick = false;
   late String location;
   // late Timer _timer;
   late int offsethours;
   late int offsetMins;
-  late TimeObject timeObject;
+  // late TimeObject timeObject;
   @override
   void initState() {
     // TODO: implement initState
@@ -51,11 +51,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    data = data.isNotEmpty
-        ? data
-        : ModalRoute.of(context)?.settings.arguments as Map;
+    // data = data.isNotEmpty
+    //     ? data
+    //     : ModalRoute.of(context)?.settings.arguments as Map;
 
-    timeObject = data['timeObject'];
+    // timeObject = data['timeObject'];
 
     // offsethours = data['offsetHours'];
     // offsetMins = data['offsetMins'];

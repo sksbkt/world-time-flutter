@@ -21,6 +21,7 @@ class _LoadingState extends State<Loading> {
   late String flag;
   late String url;
   late Map<String, dynamic> offset;
+  late Future<void> _setupworldtime;
 
   Future<void> setupWorldTime() async {
     await _loadPref();
@@ -50,6 +51,7 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
+    _setupworldtime = setupWorldTime();
     // setupWorldTime();
   }
 
@@ -57,11 +59,13 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         // future: _fbApp,
-        future: setupWorldTime(),
+        future: _setupworldtime,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Snapshot has error! ${snapshot.error.toString()}');
-            return Center(child: Text('can not connect to the servers.'));
+            return Scaffold(
+                backgroundColor: Colors.blue[800],
+                body: Center(child: Text(snapshot.error.toString())));
           } else {
             return Scaffold(
                 backgroundColor: Colors.blue[800],

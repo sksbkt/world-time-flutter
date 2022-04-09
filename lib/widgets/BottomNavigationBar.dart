@@ -17,6 +17,7 @@ class ShowBottomNavBar extends StatelessWidget {
       selectedItemColor: Colors.grey.shade800,
       unselectedItemColor: Colors.grey.shade500,
       onTap: (index) => changePage(index, context),
+      currentIndex: 1,
       showUnselectedLabels: false,
       iconSize: 26,
       selectedFontSize: 15,
@@ -32,7 +33,7 @@ class ShowBottomNavBar extends StatelessWidget {
   void changePage(int index, BuildContext context) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/account');
         break;
       case 1:
         Navigator.pushNamed(context, '/home');

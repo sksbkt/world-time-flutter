@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -17,6 +19,7 @@ class WorldTime {
 
   late bool isDayTime;
   late WorldTime worldTime;
+  String connectionStatusCode = '0';
 
   var locations = CityObject.locations;
 
@@ -43,12 +46,7 @@ class WorldTime {
   // }
 
   Future<DateTime> getTime() async {
-    // DateTime diffrenece;
-
-    // CityObject cityObject = CityObject.firstCity(location);
-
     try {
-      // print('http://worldtimeapi.org/api/timezone/$url');
       Response response = await get(Uri.parse(
           'http://worldtimeapi.org/api/timezone/${CityObject.firstCity(location).url}'));
 
@@ -69,6 +67,7 @@ class WorldTime {
 
       // DateFormat.jm().format(now);
       // _savePref();
+
       return now;
     } catch (e) {
       time = 'Error';
