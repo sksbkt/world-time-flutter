@@ -20,7 +20,7 @@ class _TasksWidgetState extends State<TasksWidget> {
   final dbhelper = EventsDatabase.instance;
   @override
   Widget build(BuildContext context) {
-    final events = Provider.of<EventProvider>(context).events;
+    // final events = Provider.of<EventProvider>(context).events;
     // final provider = Provider.of<EventProvider>(context);
     // final selectedEvents = provider.eventsOfSelectedDate;
     // if (selectedEvents.isEmpty)

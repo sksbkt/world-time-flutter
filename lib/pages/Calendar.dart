@@ -39,17 +39,6 @@ class _CalendarState extends State<Calendar> {
       body: FutureBuilder(
         future: dbHelper.readAllEvent(),
         builder: (context, snapShot) {
-          // List<Appointment> collection = <Appointment>[];
-          //
-          // if (snapShot.hasData) {
-          //   var eventsData = (snapShot.data as List<Event>).toList();
-          //   eventsData.forEach((event) {
-          //     collection.add(Appointment(
-          //         subject: event.title,
-          //         startTime: event.from,
-          //         endTime: event.to));
-          //   });
-          // }
           return SfCalendarTheme(
             data: SfCalendarThemeData(
               backgroundColor: Colors.white,
@@ -79,9 +68,6 @@ class _CalendarState extends State<Calendar> {
                 // print(calendarTapDetails.appointments);
               },
               onLongPress: (details) {
-                // final provider =
-                //     Provider.of<EventProvider>(context, listen: false);
-                // provider.setDate(details.date!);
                 showModalBottomSheet(
                     context: context,
                     builder: (context) {

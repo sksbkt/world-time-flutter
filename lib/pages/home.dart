@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
 import 'package:world_time/services/world_time.dart';
+import 'package:world_time/utilities/EventDataSource.dart';
 import 'package:world_time/utilities/objects/TimeObject.dart';
 import 'package:world_time/utilities/objects/TimeOffset.dart';
 import 'package:world_time/widgets/BottomNavigationBar.dart';
 import 'package:world_time/widgets/NavigationDrawer.dart';
+
+import '../widgets/Modules/DB/Events_DataBase.dart';
 
 class Home extends StatefulWidget {
   final TimeObject? timeobject;
@@ -21,6 +25,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  EventsDatabase dbHelper = EventsDatabase.instance;
   // Map data = {};
   late DateTime time;
   // late bool onTick = false;
@@ -157,9 +162,26 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
+                  FutureBuilder(
+                      future: dbHelper.readAllEvent(),
+                      builder: (context, snapshot) {
+                        print(snapshot.toString());
+
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          List? events = EventDataSource(snapshot).appointments;
+                          Appointment upcoming = events
+                              ?.where((element) =>
+                                  element.startTime.day == DateTime.now().day)
+                              .first;
+                          return Text(upcoming.subject);
+                        } else {
+                          return Text('loading');
+                          //TODO: add future to see upcoming events on home screen
+                        }
+                      })
                 ],
               ),
             ),
