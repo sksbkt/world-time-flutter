@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
@@ -168,15 +169,16 @@ class _HomeState extends State<Home> {
                   FutureBuilder(
                       future: dbHelper.readAllEvent(),
                       builder: (context, snapshot) {
-                        print(snapshot.toString());
-
                         if (snapshot.connectionState == ConnectionState.done) {
-                          List? events = EventDataSource(snapshot).appointments;
-                          Appointment upcoming = events
-                              ?.where((element) =>
-                                  element.startTime.day == DateTime.now().day)
-                              .first;
-                          return Text(upcoming.subject);
+                          Iterable events = EventDataSource(snapshot)
+                              .appointments!
+                              .where((element) =>
+                                  element.startTime.day == DateTime.now().day);
+                          String subject = 'no upcoming events.';
+                          if (events.length > 0)
+                            subject = (events.first as Appointment).subject;
+
+                          return Text(subject);
                         } else {
                           return Text('loading');
                           //TODO: add future to see upcoming events on home screen
