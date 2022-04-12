@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
@@ -34,6 +35,7 @@ class _HomeState extends State<Home> {
   // late Timer _timer;
   late int offsethours;
   late int offsetMins;
+
   // late TimeObject timeObject;
   @override
   void initState() {
@@ -57,6 +59,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     // data = data.isNotEmpty
     //     ? data
     //     : ModalRoute.of(context)?.settings.arguments as Map;
@@ -175,13 +178,49 @@ class _HomeState extends State<Home> {
                               .where((element) =>
                                   element.startTime.day == DateTime.now().day);
                           String subject = 'no upcoming events.';
-                          if (events.length > 0)
+                          String startingHours = '';
+                          String startingMins = '';
+                          if (events.length > 0) {
                             subject = (events.first as Appointment).subject;
+                            startingHours = (events.first as Appointment)
+                                .startTime
+                                .hour
+                                .toString();
+                            startingMins = (events.first as Appointment)
+                                .startTime
+                                .minute
+                                .toString();
+                          }
 
-                          return Text(subject);
+                          return SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width,
+                            child: ShaderMask(
+                              shaderCallback: (bonds) => LinearGradient(
+                                      begin: FractionalOffset.centerLeft,
+                                      end: FractionalOffset.center,
+                                      colors: [
+                                        Colors.white.withOpacity(0),
+                                        Colors.white
+                                      ],
+                                      tileMode: TileMode.mirror)
+                                  .createShader(bonds),
+                              child: Marquee(
+                                text: startingHours +
+                                    ':' +
+                                    startingMins +
+                                    ' ' +
+                                    subject,
+                                //
+                                style: TextStyle(color: Colors.white),
+                                blankSpace: width,
+                                velocity: 90,
+                              ),
+                            ),
+                          );
                         } else {
                           return Text('loading');
-                          //TODO: add future to see upcoming events on home screen
+                          //TODO: Marquee need more work with multiple appointment enteries and stuff
                         }
                       })
                 ],
