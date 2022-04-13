@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:world_time/services/EventProvider.dart';
 import 'package:world_time/services/GoogleSignInProvider.dart';
 import 'package:world_time/services/TimeProvider.dart';
 import 'package:world_time/services/world_time.dart';
@@ -169,66 +170,69 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  FutureBuilder(
-                      future: dbHelper.readAllEvent(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          Iterable events = EventDataSource(snapshot)
-                              .appointments!
-                              .where((element) =>
-                                  element.startTime.day == DateTime.now().day);
-                          String subject = 'no upcoming events.';
-                          String startingHours = '';
-                          String startingMins = '';
-                          if (events.length > 0) {
-                            subject = (events.first as Appointment).subject;
-                            startingHours = (events.first as Appointment)
-                                .startTime
-                                .hour
-                                .toString();
-                            startingMins = (events.first as Appointment)
-                                .startTime
-                                .minute
-                                .toString();
-                          }
+                  Consumer<EventProvider>(
+                      builder: (context, EventProvider, child) => FutureBuilder(
+                          future: dbHelper.readAllEvent(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Iterable events = EventDataSource(snapshot)
+                                  .appointments!
+                                  .where((element) =>
+                                      element.startTime.day ==
+                                      DateTime.now().day);
+                              String subject = 'no upcoming events.';
+                              String time = '';
+                              if (events.length > 0) {
+                                subject = (events.first as Appointment).subject;
+                                time = DateFormat('hh:mm').format(
+                                    (events.first as Appointment).startTime);
+                              }
 
-                          return SizedBox(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width,
-                            child: ShaderMask(
-                              shaderCallback: (bonds) => LinearGradient(
-                                      begin: FractionalOffset.centerLeft,
-                                      end: FractionalOffset.center,
-                                      colors: [
-                                        Colors.white.withOpacity(0),
-                                        Colors.white
-                                      ],
-                                      tileMode: TileMode.mirror)
-                                  .createShader(bonds),
-                              child: Marquee(
-                                text: startingHours +
-                                    ':' +
-                                    startingMins +
-                                    ' ' +
-                                    subject,
-                                //
-                                style: TextStyle(color: Colors.white),
-                                blankSpace: width,
-                                velocity: 90,
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Text('loading');
-                          //TODO: Marquee need more work with multiple appointment enteries and stuff
-                        }
-                      })
+                              return buildMarquee(
+                                  context: context,
+                                  time: time,
+                                  subject: subject);
+                            } else {
+                              return Text('loading');
+                              //TODO: Marquee need more work with multiple appointment enteries and stuff
+                            }
+                          })),
                 ],
               ),
             ),
           ),
         ),
         bottomNavigationBar: ShowBottomNavBar(context: context),
+      ),
+    );
+  }
+
+  buildMarquee(
+      {required BuildContext context,
+      required String time,
+      required String subject,
+      double? width,
+      double? height}) {
+    if (width == null) width = MediaQuery.of(context).size.width;
+    if (height == null) height = 40;
+    return SizedBox(
+      height: height,
+      width: MediaQuery.of(context).size.width,
+      child: ShaderMask(
+        shaderCallback: (bonds) => LinearGradient(
+                begin: FractionalOffset.centerLeft,
+                end: FractionalOffset.center,
+                colors: [Colors.white.withOpacity(0), Colors.white],
+                tileMode: TileMode.mirror)
+            .createShader(bonds),
+        child: Marquee(
+          text: time + subject,
+          //
+          style: TextStyle(color: Colors.white),
+          blankSpace: width,
+          velocity: 90,
+        ),
       ),
     );
   }
